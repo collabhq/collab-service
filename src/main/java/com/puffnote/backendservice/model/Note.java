@@ -22,7 +22,14 @@ public class Note {
     private List<String> value;//List of strings determined based on type of note-text or list
     private String type;
 
-    public Note() {}
+    /**
+     * No-arg Constructor - Enforce UUID generation
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     */
+    public Note() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        this.uuid = new CustomUUIDGenerator().generateSHABasedUUID();
+    }
 
     /**
      * Constructor

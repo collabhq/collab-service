@@ -23,7 +23,14 @@ public class Room {
     //@DBRef
     private List<String> userReferences;//Use manual references to users stored in their collection
 
-    public Room() {}
+    /**
+     * No-arg Constructor - Enforce UUID generation
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     */
+    public Room() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        this.uuid = new CustomUUIDGenerator().generateSHABasedUUID();
+    }
 
     /**
      * Constructor

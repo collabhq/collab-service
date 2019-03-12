@@ -24,7 +24,14 @@ public class User {
     //@DBRef
     private List<String> notesReferences;//Use manual references to notes stored in their collection
 
-    public User() {}
+    /**
+     * No-arg Constructor - Enforce UUID generation
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     */
+    public User() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        this.uuid = new CustomUUIDGenerator().generateSHABasedUUID();
+    }
 
     /**
      * Constructor
