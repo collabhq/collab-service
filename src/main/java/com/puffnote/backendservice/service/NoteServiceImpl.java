@@ -1,11 +1,19 @@
 package com.puffnote.backendservice.service;
 
 import com.puffnote.backendservice.model.Note;
+import com.puffnote.backendservice.model.Room;
+import com.puffnote.backendservice.model.User;
+import com.puffnote.backendservice.repository.RoomRepository;
+import com.puffnote.backendservice.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.puffnote.backendservice.repository.NoteRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by karthik on 2019-03-11
@@ -16,6 +24,12 @@ public class NoteServiceImpl implements NoteService {
 
     @Autowired
     private NoteRepository noteRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Override
     public Iterable listAll() {
@@ -69,5 +83,32 @@ public class NoteServiceImpl implements NoteService {
         noteRepository.deleteAll();
         logger.info("Deleted All Notes");
     }
+
+    @Override
+    public List<Note> listAllNotesByUserUuid(String uuid) {
+        List<Note> notesList = new ArrayList<Note>();
+        User user = userRepository.findByUuid(uuid);
+        for (String noteReference : user.getNotesReferences()) {
+            notesList.add(this.findById(noteReference));
+        }
+        logger.info("All notes by user uuid: " + notesList);
+        return notesList;
+    }
+
+    @Override
+    public List<Note> listAllNotesByRoomUuid(String uuid) {
+        List<Note> notesList = new ArrayList<Note>();
+        Room room = roomRepository.findByUuid(uuid);
+        for (String userReference : room.getUserReferences()) {
+            Optional<User> user = userRepository.findById(userReference);
+            user.ifPresent(existingUser -> {
+                String userUuid = existingUser.getUUID();
+                notesList.addAll(this.listAllNotesByUserUuid(userUuid));
+            });
+        }
+        logger.info("All notes by room uuid: " + notesList);
+        return notesList;
+    }
+
 
 }

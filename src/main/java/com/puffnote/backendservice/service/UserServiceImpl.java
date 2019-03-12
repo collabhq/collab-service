@@ -1,13 +1,18 @@
 package com.puffnote.backendservice.service;
 
 import com.puffnote.backendservice.model.Note;
+import com.puffnote.backendservice.model.Room;
 import com.puffnote.backendservice.model.User;
+import com.puffnote.backendservice.repository.NoteRepository;
+import com.puffnote.backendservice.repository.RoomRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.puffnote.backendservice.repository.UserRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,6 +24,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private NoteRepository noteRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Override
     public Iterable listAll() {
@@ -89,6 +100,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void addNoteToUserByUuid(String userUuid, String noteUuid) {
+        User user = this.findByUuid(userUuid);
+        Note note = noteRepository.findByUuid(noteUuid);
+        user.getNotesReferences().add(note.getId());
+        userRepository.save(user);
+        logger.info("Added Note with UUID: " + noteUuid + " to User: " + user);
+    }
+
+    @Override
     public void removeNoteFromUser(User user, Note note) {
         user.getNotesReferences().removeIf(reference -> (reference == note.getId()));
         userRepository.save(user);
@@ -101,6 +121,26 @@ public class UserServiceImpl implements UserService {
         user.getNotesReferences().removeIf(reference -> (reference == noteId));
         userRepository.save(user);
         logger.info("Removed Note with Id: " + noteId + " to User: " + user);
+    }
+
+    @Override
+    public void removeNoteFromUserByUuid(String userUuid, String noteUuid) {
+        User user = this.findByUuid(userUuid);
+        Note note = noteRepository.findByUuid(noteUuid);
+        user.getNotesReferences().removeIf(reference -> (reference == note.getId()));
+        userRepository.save(user);
+        logger.info("Removed Note with UUID: " + noteUuid + " to User: " + user);
+    }
+
+    @Override
+    public List<User> listAllUsersByRoomUuid(String uuid) {
+        List<User> userList = new ArrayList<User>();
+        Room room = roomRepository.findByUuid(uuid);
+        for (String userReference : room.getUserReferences()) {
+            userList.add(this.findById(userReference));
+        }
+        logger.info("All users by room uuid: " + userList);
+        return userList;
     }
 
 }
