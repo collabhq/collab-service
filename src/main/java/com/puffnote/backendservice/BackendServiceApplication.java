@@ -40,42 +40,65 @@ public class BackendServiceApplication {
 		context.refresh();
 
 		//Services
-		RoomServiceImpl rs = context.getBean(RoomServiceImpl.class);
-		NoteServiceImpl ns = context.getBean(NoteServiceImpl.class);
-		UserServiceImpl us = context.getBean(UserServiceImpl.class);
+		RoomServiceImpl roomService = context.getBean(RoomServiceImpl.class);
+		NoteServiceImpl noteService = context.getBean(NoteServiceImpl.class);
+		UserServiceImpl userService = context.getBean(UserServiceImpl.class);
 
 		List<String> notes = new ArrayList<String>();
 		List<String> noteReferences = new ArrayList<String>();
 		List<String> userReferences = new ArrayList<String>();
 
 		//Delete All Data
-		rs.deleteAll();
-		us.deleteAll();
-		ns.deleteAll();
+		roomService.deleteAll();
+		userService.deleteAll();
+		noteService.deleteAll();
 
-		//Create Note
+		//Room created first with zero users
+		Room room = new Room("room2", userReferences);
+		roomService.saveOrUpdate(room);//Add room to DB
+
+		//User created next with zero notes
+		User user = new User("user1", noteReferences);
+		userService.saveOrUpdate(user);//Add user to DB
+		//Add user reference to room
+		roomService.addUserToRoom(room, user);
+
+		//Note created by user
 		notes.add("abcd");
-		Note n = new Note("note1", notes, "text");
-		ns.saveOrUpdate(n);
-		//Get Note Reference
-		noteReferences.add(n.getId());
-		//TODO: Get reference on successful save
-
-
-		//Create User
-		User u = new User("user1", noteReferences);
-		us.saveOrUpdate(u);
-		//Get User Reference
-		userReferences.add(u.getId());
-		//TODO: Get reference on successful save
-
-		Room r = new Room("room2", userReferences);
-		rs.saveOrUpdate(r);
+		Note note = new Note("note1", notes, "text");
+		noteService.saveOrUpdate(note);//Add note to DB
+		//Add note reference to user
+		userService.addNoteToUser(user, note);
 
 		//List All Data
-		rs.listAll();
-		us.listAll();
-		ns.listAll();
+		roomService.listAll();
+		userService.listAll();
+		noteService.listAll();
+
+		//Simulate note deletion
+		Note noteToDelete = note;//Temporary assignment
+		noteService.deleteAll();
+		//Remove note reference from user
+		userService.removeNoteFromUser(user, noteToDelete);
+
+		//List Data
+		userService.listAll();
+		noteService.listAll();
+
+		//Create new note
+		Note newNote = new Note("note2", notes, "text");
+		noteService.saveOrUpdate(newNote);
+		//Add note reference to user by Id
+		userService.addNoteToUserById(user.getId(), newNote.getId());
+
+		//List Data
+		userService.listAll();
+		noteService.listAll();
+
+		//Fetch Data from DB into Objects using our custom UUID
+		Room temporaryRoom = roomService.findByUuid(room.getUUID());
+		User temporaryUser = userService.findByUuid(user.getUUID());
+		Note temporaryNote = noteService.findByUuid(newNote.getUUID());
 	}
 
 }

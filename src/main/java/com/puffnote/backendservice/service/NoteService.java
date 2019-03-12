@@ -8,6 +8,7 @@ import com.puffnote.backendservice.model.Note;
 public interface NoteService {
     Iterable listAll();
     Note findById(String id);
+    Note findByUuid(String uuid);
     Note findByName(String name);
     Note saveOrUpdate(Note note);
     void delete(Note note);

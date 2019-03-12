@@ -28,6 +28,11 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    public Note findByUuid(String uuid) {
+        return noteRepository.findByUuid(uuid);
+    }
+
+    @Override
     public Note findByName(String name) {
         return noteRepository.findByName(name);
     }
