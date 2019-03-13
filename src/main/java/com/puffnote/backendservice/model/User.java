@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +32,8 @@ public class User {
      */
     public User() {
         this.uuid = CustomUUIDGenerator.generateRandomUUID();
+        this.name = "";
+        this.notesReferences = new ArrayList<String>();
     }
 
     /**
