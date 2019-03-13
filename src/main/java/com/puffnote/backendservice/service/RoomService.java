@@ -18,6 +18,8 @@ public interface RoomService {
     void deleteAll();
     void addUserToRoom(Room room, User user);
     void addUserToRoomById(String roomId, String userId);
+    void addUserToRoomByUuid(String roomUuid, String userUuid);
     void removeUserFromRoom(Room room, User user);
     void removeUserFromRoomById(String roomId, String userId);
+    void removeUserFromRoomByUuid(String roomUuid, String userUuid);
 }

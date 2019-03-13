@@ -1,5 +1,6 @@
 package com.puffnote.backendservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.puffnote.backendservice.util.CustomUUIDGenerator;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * Created by karthik on 2019-03-11
  */
+@JsonIgnoreProperties({"id"})
 @Document(collection = "notes")
 public class Note {
 
@@ -24,11 +26,9 @@ public class Note {
 
     /**
      * No-arg Constructor - Enforce UUID generation
-     * @throws UnsupportedEncodingException
-     * @throws NoSuchAlgorithmException
      */
-    public Note() throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        this.uuid = new CustomUUIDGenerator().generateSHABasedUUID();
+    public Note() {
+        this.uuid = CustomUUIDGenerator.generateRandomUUID();
     }
 
     /**
@@ -36,11 +36,9 @@ public class Note {
      * @param name
      * @param value
      * @param type
-     * @throws UnsupportedEncodingException
-     * @throws NoSuchAlgorithmException
      */
-    public Note(String name, List<String> value, String type) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        this.uuid = new CustomUUIDGenerator().generateSHABasedUUID();
+    public Note(String name, List<String> value, String type) {
+        this.uuid = CustomUUIDGenerator.generateRandomUUID();
         this.name = name;
         this.value = value;
         this.type = type;

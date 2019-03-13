@@ -2,6 +2,7 @@ package com.puffnote.backendservice.service;
 
 import com.puffnote.backendservice.model.Room;
 import com.puffnote.backendservice.model.User;
+import com.puffnote.backendservice.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class RoomServiceImpl implements RoomService {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public Iterable listAll() {
@@ -87,6 +91,15 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public void addUserToRoomByUuid(String roomUuid, String userUuid) {
+        Room room = this.findByUuid(roomUuid);
+        User user = userRepository.findByUuid(userUuid);
+        room.getUserReferences().add(user.getId());
+        roomRepository.save(room);
+        logger.info("Added User with Uuid: " + userUuid + " to room: " + room);
+    }
+
+    @Override
     public void removeUserFromRoom(Room room, User user) {
         room.getUserReferences().removeIf(reference -> (reference == user.getId()));
         roomRepository.save(room);
@@ -99,6 +112,15 @@ public class RoomServiceImpl implements RoomService {
         room.getUserReferences().removeIf(reference -> (reference == userId));
         roomRepository.save(room);
         logger.info("Removed User with Id: " + userId + " to room: " + room);
+    }
+
+    @Override
+    public void removeUserFromRoomByUuid(String roomUuid, String userUuid) {
+        Room room = this.findByUuid(roomUuid);
+        User user = userRepository.findByUuid(userUuid);
+        room.getUserReferences().removeIf(reference -> (reference == user.getId()));
+        roomRepository.save(room);
+        logger.info("Removed User with Uuid: " + userUuid + " to room: " + room);
     }
 
 }
