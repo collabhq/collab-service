@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +30,9 @@ public class Note {
      */
     public Note() {
         this.uuid = CustomUUIDGenerator.generateRandomUUID();
+        this.name = "";
+        this.value = new ArrayList<String>();
+        this.type = "";
     }
 
     /**

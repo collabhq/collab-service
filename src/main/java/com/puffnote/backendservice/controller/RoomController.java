@@ -9,6 +9,7 @@ import java.util.HashMap;
  */
 @RestController
 public interface RoomController {
-    @PostMapping(value = "/room")
-    HashMap createRoom(@PathVariable String username);
+    @RequestMapping(value = "/room/{username}")
+    HashMap createRoom(@PathVariable("username") String username);
+
 }
