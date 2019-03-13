@@ -1,15 +1,21 @@
 package com.puffnote.backendservice.controller;
 
+import com.mongodb.util.JSON;
 import com.puffnote.backendservice.model.Note;
 import com.puffnote.backendservice.service.NoteService;
 import com.puffnote.backendservice.service.RoomService;
 import com.puffnote.backendservice.service.UserService;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
 
 /**
  * Created by sudeshgutta on 2019-03-12
  */
+@Component
 public class NoteControllerImpl implements NoteController {
 
     @Autowired
@@ -25,11 +31,14 @@ public class NoteControllerImpl implements NoteController {
     private RoomService roomService;
 
     @Override
-    public void patchNote(String roomId, String userId) {
+    public void patchNote(String payload) {
+        //TODO: Fix this in a better way
+        HashMap payloadObject = (HashMap) JSON.parse(payload);
         //Create Note
         Note note = new Note();
         noteService.saveOrUpdate(note);
-        userService.addNoteToUserById(userId, note.getId());
-        simpMessagingTemplate.convertAndSend("/queue/room/" + roomId, note);
+        userService.addNoteToUserById(payloadObject.get("userId").toString(), note.getId());
+        //TODO: Fix socket response
+        simpMessagingTemplate.convertAndSend("/queue/room/" + payloadObject.get("roomId").toString(), note);
     }
 }

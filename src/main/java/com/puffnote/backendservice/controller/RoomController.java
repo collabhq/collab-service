@@ -1,4 +1,5 @@
 package com.puffnote.backendservice.controller;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
@@ -9,7 +10,9 @@ import java.util.HashMap;
  */
 @RestController
 public interface RoomController {
-    @RequestMapping(value = "/room/{username}")
-    HashMap createRoom(@PathVariable("username") String username);
-
+    @PostMapping(value = "/room",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    HashMap createRoom(@RequestBody String username);
 }
