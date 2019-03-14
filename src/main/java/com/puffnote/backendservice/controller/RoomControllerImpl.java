@@ -26,7 +26,7 @@ public class RoomControllerImpl implements RoomController {
 
     @Override
     public HashMap createRoom(String username) {
-        User user = new User(username, null);
+        User user = new User(username);
         userService.saveOrUpdate(user);
         Room room = new Room();
         roomService.saveOrUpdate(room);

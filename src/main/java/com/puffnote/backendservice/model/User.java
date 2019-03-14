@@ -39,12 +39,11 @@ public class User {
     /**
      * Constructor
      * @param name
-     * @param notesReferences
      */
-    public User(String name, List<String> notesReferences) {
+    public User(String name) {
         this.uuid = CustomUUIDGenerator.generateRandomUUID();
         this.name = name;
-        this.notesReferences = notesReferences;
+        this.notesReferences = new ArrayList<String>();
     }
 
     /**

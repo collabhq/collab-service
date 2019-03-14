@@ -38,12 +38,11 @@ public class Room {
     /**
      * Constructor
      * @param name
-     * @param userReferences
      */
-    public Room(String name, List<String> userReferences) {
+    public Room(String name) {
         this.uuid = CustomUUIDGenerator.generateRandomUUID();
         this.name = name;
-        this.userReferences = userReferences;
+        this.userReferences = new ArrayList<String>();
     }
 
     /**
