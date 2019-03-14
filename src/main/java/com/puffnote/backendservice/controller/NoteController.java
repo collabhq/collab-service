@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public interface NoteController {
     @MessageMapping("/note")
+    @SendTo("/queue/room")
     //TODO: Add operation object as parameter to this method
-    void patchNote(@Payload String payload);
+    Note patchNote(@Payload String payload);
 }

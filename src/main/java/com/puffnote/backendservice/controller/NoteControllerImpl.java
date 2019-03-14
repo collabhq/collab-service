@@ -31,14 +31,15 @@ public class NoteControllerImpl implements NoteController {
     private RoomService roomService;
 
     @Override
-    public void patchNote(String payload) {
+    public Note patchNote(String payload) {
         //TODO: Fix this in a better way
         HashMap payloadObject = (HashMap) JSON.parse(payload);
         //Create Note
         Note note = new Note();
         noteService.saveOrUpdate(note);
-        userService.addNoteToUserById(payloadObject.get("userId").toString(), note.getId());
+        userService.addNoteToUserByUuid(payloadObject.get("userId").toString(), note.getUUID());
         //TODO: Fix socket response
-        simpMessagingTemplate.convertAndSend("/queue/room/" + payloadObject.get("roomId").toString(), note);
+        //simpMessagingTemplate.convertAndSend("/queue/room/" + payloadObject.get("roomId").toString(), note);
+        return note;
     }
 }
