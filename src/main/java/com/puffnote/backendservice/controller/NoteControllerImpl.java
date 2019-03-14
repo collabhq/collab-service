@@ -37,9 +37,7 @@ public class NoteControllerImpl implements NoteController {
         //Create Note
         Note note = new Note();
         noteService.saveOrUpdate(note);
-        userService.addNoteToUserByUuid(payloadObject.get("userId").toString(), note.getUUID());
-        //TODO: Fix socket response
-        //simpMessagingTemplate.convertAndSend("/queue/room/" + payloadObject.get("roomId").toString(), note);
+        userService.addNoteToUserByUuid(payloadObject.get("userId").toString(), note.getId());
         return note;
     }
 }

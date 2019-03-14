@@ -1,7 +1,6 @@
 package com.puffnote.backendservice.controller;
 
 import com.puffnote.backendservice.model.Note;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -12,8 +11,8 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public interface NoteController {
-    @MessageMapping("/note")
-    @SendTo("/queue/room")
+    @MessageMapping("/note/{roomId}")
+    @SendTo("/topic/room/{roomId}")
     //TODO: Add operation object as parameter to this method
     Note patchNote(@Payload String payload);
 }

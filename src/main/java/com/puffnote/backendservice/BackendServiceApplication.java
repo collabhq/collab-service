@@ -16,5 +16,4 @@ public class BackendServiceApplication {
 
 		SpringApplication.run(BackendServiceApplication.class, args);
 	}
-
 }
