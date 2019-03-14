@@ -37,7 +37,7 @@ public class NoteControllerImpl implements NoteController {
         //Create Note
         Note note = new Note();
         noteService.saveOrUpdate(note);
-        userService.addNoteToUserByUuid(payloadObject.get("userId").toString(), note.getId());
+        userService.addNoteToUserByUuid(payloadObject.get("userId").toString(), note.getUUID());
         return note;
     }
 }
