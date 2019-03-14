@@ -4,7 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-@SpringBootApplication
+
+@SpringBootApplication(exclude = {
+		//TODO: Fix Security
+        org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class
+})
 public class BackendServiceApplication {
 	private static final Logger logger = LoggerFactory.getLogger(BackendServiceApplication.class);
 
@@ -12,5 +16,4 @@ public class BackendServiceApplication {
 
 		SpringApplication.run(BackendServiceApplication.class, args);
 	}
-
 }
