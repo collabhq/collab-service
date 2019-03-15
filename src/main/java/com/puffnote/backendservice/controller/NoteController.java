@@ -11,8 +11,8 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public interface NoteController {
-    @MessageMapping("/note/{roomId}")
-    @SendTo("/topic/room/{roomId}")
+    @MessageMapping("/note/{identifier}")
+    @SendTo("/topic/room/{identifier}")
     //TODO: Add operation object as parameter to this method
     Note patchNote(@Payload String payload);
 }
