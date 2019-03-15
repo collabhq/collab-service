@@ -32,8 +32,24 @@ public class RoomControllerImpl implements RoomController {
         roomService.saveOrUpdate(room);
         roomService.addUserToRoom(room, user);
         HashMap<String, String> output = new HashMap<>();
+        //TODO: Refactor identifiers below
         output.put("roomId", room.getUUID());
         output.put("userId", user.getUUID());
+        return output;
+    }
+
+    @Override
+    public HashMap joinRoom(String identifier, String username) {
+        HashMap<String, String> output = new HashMap<>();
+        Room room = roomService.findByUuid(identifier);
+        if(room != null) {
+            User user = new User(username);
+            roomService.addUserToRoom(room, user);
+            //TODO: Refactor identifiers below
+            output.put("roomId", room.getUUID());
+            output.put("userId", user.getUUID());
+        }
+        //TODO: Throw custom exception when room is not found
         return output;
     }
 }
