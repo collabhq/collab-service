@@ -1,11 +1,14 @@
 package com.puffnote.backendservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.puffnote.backendservice.util.Constants;
 import com.puffnote.backendservice.util.CustomUUIDGenerator;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,7 +24,13 @@ public class Room {
     @Id
     private String id;
 
+    @Indexed(unique = true)
     private String uuid;//Use separate UUID for reference
+
+    //We persist data only for 48 hours from creation
+    @Indexed(name ="createdAt", expireAfterSeconds = Constants.DEFAULT_DOCUMENT_EXPIRY_TIME_SECONDS)
+    private Date createdAt;
+
     private String name;
 
     private List<String> userReferences;//Use manual references to users stored in their collection
@@ -31,6 +40,7 @@ public class Room {
      * UUID enforced and uses a short ID format
      */
     public Room() {
+        this.createdAt = new Date();
         this.uuid = CustomUUIDGenerator.generateShortUUID();
         this.name = "";
         this.userReferences = new ArrayList<String>();
@@ -42,6 +52,7 @@ public class Room {
      * @param name Name of room
      */
     public Room(String name) {
+        this.createdAt = new Date();
         this.uuid = CustomUUIDGenerator.generateShortUUID();
         this.name = name;
         this.userReferences = new ArrayList<String>();

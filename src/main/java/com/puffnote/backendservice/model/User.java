@@ -1,11 +1,14 @@
 package com.puffnote.backendservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.puffnote.backendservice.util.Constants;
 import com.puffnote.backendservice.util.CustomUUIDGenerator;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,7 +25,13 @@ public class User {
     @Id
     private String id;
 
+    @Indexed(unique = true)
     private String uuid;//Use separate UUID for reference
+
+    //We persist data only for 48 hours from creation
+    @Indexed(name ="createdAt", expireAfterSeconds = Constants.DEFAULT_DOCUMENT_EXPIRY_TIME_SECONDS)
+    private Date createdAt;
+
     private String name;
 
     private List<String> notesReferences;//Use manual references to notes stored in their collection
@@ -32,6 +41,7 @@ public class User {
      * UUID enforced
      */
     public User() {
+        this.createdAt = new Date();
         this.uuid = CustomUUIDGenerator.generateRandomUUID();
         this.name = "";
         this.notesReferences = new ArrayList<String>();
@@ -43,6 +53,7 @@ public class User {
      * @param name Name of user
      */
     public User(String name) {
+        this.createdAt = new Date();
         this.uuid = CustomUUIDGenerator.generateRandomUUID();
         this.name = name;
         this.notesReferences = new ArrayList<String>();
