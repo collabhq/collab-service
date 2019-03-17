@@ -11,6 +11,17 @@ public final class Constants {
     private Constants() {}
 
     /**
+     * ENUMS-->
+     */
+
+    //ENUMS for Note Operation Object
+    public static enum NoteOperation{
+        ADD,
+        EDIT,
+        DELETE
+    }
+
+    /**
      * Constants-->
      */
 
