@@ -24,6 +24,11 @@ public class RoomControllerImpl implements RoomController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Creates a new room and adds the creator to it
+     * @param username Username
+     * @return HashMap containing roomUUID & userUUID
+     */
     @Override
     public HashMap createRoom(String username) {
         User user = new User(username);
@@ -32,12 +37,17 @@ public class RoomControllerImpl implements RoomController {
         roomService.saveOrUpdate(room);
         roomService.addUserToRoom(room, user);
         HashMap<String, String> output = new HashMap<>();
-        //TODO: Refactor identifiers below
-        output.put("roomId", room.getUUID());
-        output.put("userId", user.getUUID());
+        output.put("roomUUID", room.getUUID());
+        output.put("userUUID", user.getUUID());
         return output;
     }
 
+    /**
+     * Adds a user to the room by its identifier
+     * @param identifier Room Identifier
+     * @param username Username
+     * @return HashMap containing roomUUID & userUUID
+     */
     @Override
     public HashMap joinRoom(String identifier, String username) {
         HashMap<String, String> output = new HashMap<>();
@@ -45,9 +55,8 @@ public class RoomControllerImpl implements RoomController {
         if(room != null) {
             User user = new User(username);
             roomService.addUserToRoom(room, user);
-            //TODO: Refactor identifiers below
-            output.put("roomId", room.getUUID());
-            output.put("userId", user.getUUID());
+            output.put("roomUUID", room.getUUID());
+            output.put("userUUID", user.getUUID());
         }
         //TODO: Throw custom exception when room is not found
         return output;
