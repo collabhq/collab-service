@@ -13,12 +13,20 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    /**
+     * Configures the STOMP web socket endpoint of service
+     * @param registry Stomp Endpoint Registry
+     */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         //TODO: Fix setAllowedOrigins
         registry.addEndpoint("/puffnotesocket").setAllowedOrigins("*").withSockJS();
     }
 
+    /**
+     * Configures a message broker
+     * @param config Message Broker Registry
+     */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.setApplicationDestinationPrefixes("/app");
