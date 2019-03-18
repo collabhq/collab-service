@@ -2,6 +2,7 @@ package com.puffnote.backendservice.controller;
 
 import com.mongodb.util.JSON;
 import com.puffnote.backendservice.model.Note;
+import com.puffnote.backendservice.model.NoteOperationObject;
 import com.puffnote.backendservice.service.NoteService;
 import com.puffnote.backendservice.service.RoomService;
 import com.puffnote.backendservice.service.UserService;
@@ -31,13 +32,35 @@ public class NoteControllerImpl implements NoteController {
     private RoomService roomService;
 
     @Override
-    public Note patchNote(String payload) {
-        //TODO: Fix this in a better way
-        HashMap payloadObject = (HashMap) JSON.parse(payload);
-        //Create Note
-        Note note = new Note();
-        noteService.saveOrUpdate(note);
-        userService.addNoteToUserByUuid(payloadObject.get("userId").toString(), note.getUUID());
+    public Note patchNote(NoteOperationObject payload) {
+        //Use NoteOperationObject to add/modify/delete Note
+        Note note = null;
+        switch (payload.getNoteOperation()) {
+            case ADD:
+                note = new Note();
+                if(payload.getNoteName() != null)
+                    note.setName(payload.getNoteName());
+                if(payload.getNoteValue() != null)
+                    note.setValue(payload.getNoteValue());
+                noteService.saveOrUpdate(note);
+                userService.addNoteToUserByUuid(payload.getUserUUID(), note.getUUID());
+                break;
+            case EDIT:
+                note = noteService.findByUuid(payload.getNoteUUID());
+                if(payload.getNoteName() != null)
+                    note.setName(payload.getNoteName());
+                if(payload.getNoteValue() != null)
+                    note.setValue(payload.getNoteValue());
+                noteService.saveOrUpdate(note);
+                break;
+            case DELETE:
+                note = noteService.findByUuid(payload.getNoteUUID());
+                userService.removeNoteFromUserByUuid(payload.getUserUUID(), payload.getNoteUUID());
+                noteService.deleteById(note.getId());
+                break;
+            default:
+                break;
+        }
         return note;
     }
 }

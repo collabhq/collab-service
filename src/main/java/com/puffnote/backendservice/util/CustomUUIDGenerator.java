@@ -1,5 +1,7 @@
 package com.puffnote.backendservice.util;
 
+import org.apache.commons.text.RandomStringGenerator;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -7,6 +9,10 @@ import java.util.UUID;
 
 /**
  * Created by karthik on 2019-03-11
+ */
+
+/**
+ * Class used for generating different types of UUIDS
  */
 public class CustomUUIDGenerator {
 
@@ -21,6 +27,17 @@ public class CustomUUIDGenerator {
     public static String generateRandomUUID() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
+    }
+
+    /**
+     * Use a short alphanumeric ID generator
+     * @return ID
+     */
+    public static String generateShortUUID() {
+        char [][] stringPairs = {{'a', 'z'}, {'A', 'Z'}, {'0', '9'}};
+        RandomStringGenerator shortIDGenerator = new RandomStringGenerator.Builder().withinRange(stringPairs).build();
+        String shortID = shortIDGenerator.generate(6);
+        return shortID;
     }
 
     /**
