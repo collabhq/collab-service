@@ -114,5 +114,5 @@ public interface UserService {
      * @param uuid
      * @return List of all User objects found
      */
-    List<User> listAllUsersByRoomUuid(String uuid);
+    List<User> listAllUsersByWorkspaceUuid(String uuid);
 }

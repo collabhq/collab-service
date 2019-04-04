@@ -43,7 +43,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public Note findByUuid(String uuid) {
-        return noteRepository.findByUUID(uuid);
+        return noteRepository.findByUuid(uuid);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<Note> listAllNotesByUserUuid(String uuid) {
         List<Note> notesList = new ArrayList<Note>();
-        User user = userRepository.findByUUID(uuid);
+        User user = userRepository.findByUuid(uuid);
         for (String noteReference : user.getNotesReferences()) {
             notesList.add(this.findById(noteReference));
         }
@@ -96,9 +96,9 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> listAllNotesByRoomUuid(String uuid) {
+    public List<Note> listAllNotesByWorkspaceUuid(String uuid) {
         List<Note> notesList = new ArrayList<Note>();
-        Workspace workspace = workspaceRepository.findByUUID(uuid);
+        Workspace workspace = workspaceRepository.findByUuid(uuid);
         for (String userReference : workspace.getUserReferences()) {
             Optional<User> user = userRepository.findById(userReference);
             user.ifPresent(existingUser -> {

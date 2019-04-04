@@ -14,16 +14,16 @@ import org.springframework.data.rest.core.annotation.RestResource;
 @RestResource(exported = false)
 public interface WorkspaceRepository extends MongoRepository<Workspace,String> {
     /**
-     * Find room object by name
+     * Find workspace object by name
      * @param name
      * @return Workspace object found
      */
     public Workspace findByName(String name);
 
     /**
-     * Find room object by uuid
+     * Find workspace object by uuid
      * @param uuid
      * @return Workspace object found
      */
-    public Workspace findByUUID(String uuid);
+    public Workspace findByUuid(String uuid);
 }

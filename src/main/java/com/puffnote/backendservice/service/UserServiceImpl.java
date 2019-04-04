@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUuid(String uuid) {
-        return userRepository.findByUUID(uuid);
+        return userRepository.findByUuid(uuid);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addNoteToUserByUuid(String userUuid, String noteUuid) {
         User user = this.findByUuid(userUuid);
-        Note note = noteRepository.findByUUID(noteUuid);
+        Note note = noteRepository.findByUuid(noteUuid);
         user.getNotesReferences().add(note.getId());
         userRepository.save(user);
         logger.info("Added Note with UUID: " + noteUuid + " to User: " + user);
@@ -125,16 +125,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void removeNoteFromUserByUuid(String userUuid, String noteUuid) {
         User user = this.findByUuid(userUuid);
-        Note note = noteRepository.findByUUID(noteUuid);
+        Note note = noteRepository.findByUuid(noteUuid);
         user.getNotesReferences().removeIf(reference -> (reference == note.getId()));
         userRepository.save(user);
         logger.info("Removed Note with UUID: " + noteUuid + " to User: " + user);
     }
 
     @Override
-    public List<User> listAllUsersByRoomUuid(String uuid) {
+    public List<User> listAllUsersByWorkspaceUuid(String uuid) {
         List<User> userList = new ArrayList<User>();
-        Workspace workspace = workspaceRepository.findByUUID(uuid);
+        Workspace workspace = workspaceRepository.findByUuid(uuid);
         for (String userReference : workspace.getUserReferences()) {
             userList.add(this.findById(userReference));
         }

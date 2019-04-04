@@ -34,7 +34,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public Workspace findByUuid(String uuid) {
-        return workspaceRepository.findByUUID(uuid);
+        return workspaceRepository.findByUuid(uuid);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Override
     public void deleteAll() {
         workspaceRepository.deleteAll();
-        logger.info("Deleted All Rooms");
+        logger.info("Deleted All Workspaces");
     }
 
     @Override
@@ -93,7 +93,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Override
     public void addUserToWorkspaceByUuid(String workspaceUUID, String userUUID) {
         Workspace workspace = this.findByUuid(workspaceUUID);
-        User user = userRepository.findByUUID(userUUID);
+        User user = userRepository.findByUuid(userUUID);
         workspace.getUserReferences().add(user.getId());
         workspaceRepository.save(workspace);
         logger.info("Added User with Uuid: " + userUUID + " to workspace: " + workspace);
@@ -117,7 +117,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Override
     public void removeUserFromWorkspaceByUuid(String workspaceUUID, String userUUID) {
         Workspace workspace = this.findByUuid(workspaceUUID);
-        User user = userRepository.findByUUID(userUUID);
+        User user = userRepository.findByUuid(userUUID);
         workspace.getUserReferences().removeIf(reference -> (reference == user.getId()));
         workspaceRepository.save(workspace);
         logger.info("Removed User with Uuid: " + userUUID + " to workspace: " + workspace);

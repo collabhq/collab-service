@@ -25,7 +25,7 @@ public class WorkspaceControllerImpl implements WorkspaceController {
     private UserService userService;
 
     /**
-     * Creates a new room and adds the creator to it
+     * Creates a new workspace and adds the creator to it
      * @param reqBody reqBody
      * @return HashMap containing workspaceUUID & userUUID
      */
@@ -53,7 +53,7 @@ public class WorkspaceControllerImpl implements WorkspaceController {
      * Adds a user to the workspace by their identifier
      * @param identifier Workspace Identifier
      * @param username Username
-     * @return HashMap containing roomUUID & userUUID
+     * @return HashMap containing workspaceUUID & userUUID
      */
     @Override
     public HashMap joinWorkspace(String identifier, String username) {

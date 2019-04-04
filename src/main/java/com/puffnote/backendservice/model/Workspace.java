@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 /**
- * Class that represents a room object
+ * Class that represents a workspace object
  */
 @JsonIgnoreProperties({"id", "userReferences"})
 @Document(collection = "workspaces")
@@ -49,7 +49,7 @@ public class Workspace {
     /**
      * Constructor
      * UUID enforced and uses a short ID format
-     * @param name Name of room
+     * @param name Name of workspace
      */
     public Workspace(String name) {
         this.createdAt = new Date();
@@ -75,7 +75,7 @@ public class Workspace {
     }
 
     /**
-     * Get name of room
+     * Get name of workspace
      * @return name
      */
     public String getName() {
@@ -83,7 +83,7 @@ public class Workspace {
     }
 
     /**
-     * Set name for room
+     * Set name for workspace
      * @param name
      */
     public void setName(String name) {
@@ -91,7 +91,7 @@ public class Workspace {
     }
 
     /**
-     * Get a list of DB references of all users linked to this room
+     * Get a list of DB references of all users linked to this workspace
      * @return List of references
      */
     public List<String> getUserReferences() {

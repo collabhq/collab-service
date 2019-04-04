@@ -25,6 +25,6 @@ public interface NoteRepository extends MongoRepository<Note,String> {
      * @param uuid
      * @return Note object found
      */
-    public Note findByUUID(String uuid);
+    public Note findByUuid(String uuid);
 }
 
