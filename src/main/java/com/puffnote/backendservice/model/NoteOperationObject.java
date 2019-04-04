@@ -8,7 +8,7 @@ import com.puffnote.backendservice.util.Constants;
 public class NoteOperationObject {
 
     private String userUUID;
-    private String roomUUID;
+    private String workspaceUUID;
 
     private String noteUUID;
     private String noteName;
@@ -25,11 +25,11 @@ public class NoteOperationObject {
     }
 
     /**
-     * Get Room UUID
-     * @return Room UUID
+     * Get Workspace UUID
+     * @return Workspace UUID
      */
-    public String getRoomUUID() {
-        return roomUUID;
+    public String getWorkspaceUUID() {
+        return workspaceUUID;
     }
 
     /**

@@ -1,9 +1,9 @@
 package com.puffnote.backendservice.service;
 
 import com.puffnote.backendservice.model.Note;
-import com.puffnote.backendservice.model.Room;
+import com.puffnote.backendservice.model.Workspace;
 import com.puffnote.backendservice.model.User;
-import com.puffnote.backendservice.repository.RoomRepository;
+import com.puffnote.backendservice.repository.WorkspaceRepository;
 import com.puffnote.backendservice.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class NoteServiceImpl implements NoteService {
     private UserRepository userRepository;
 
     @Autowired
-    private RoomRepository roomRepository;
+    private WorkspaceRepository workspaceRepository;
 
     @Override
     public Iterable listAll() {
@@ -96,17 +96,17 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> listAllNotesByRoomUuid(String uuid) {
+    public List<Note> listAllNotesByWorkspaceUuid(String uuid) {
         List<Note> notesList = new ArrayList<Note>();
-        Room room = roomRepository.findByUuid(uuid);
-        for (String userReference : room.getUserReferences()) {
+        Workspace workspace = workspaceRepository.findByUuid(uuid);
+        for (String userReference : workspace.getUserReferences()) {
             Optional<User> user = userRepository.findById(userReference);
             user.ifPresent(existingUser -> {
                 String userUuid = existingUser.getUUID();
                 notesList.addAll(this.listAllNotesByUserUuid(userUuid));
             });
         }
-        logger.info("All notes by room uuid: " + notesList);
+        logger.info("All notes by workspace uuid: " + notesList);
         return notesList;
     }
 

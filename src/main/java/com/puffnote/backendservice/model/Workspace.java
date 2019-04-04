@@ -16,11 +16,11 @@ import java.util.List;
  */
 
 /**
- * Class that represents a room object
+ * Class that represents a workspace object
  */
 @JsonIgnoreProperties({"id", "userReferences"})
-@Document(collection = "rooms")
-public class Room {
+@Document(collection = "workspaces")
+public class Workspace {
     @Id
     private String id;
 
@@ -39,7 +39,7 @@ public class Room {
      * No-arg Constructor
      * UUID enforced and uses a short ID format
      */
-    public Room() {
+    public Workspace() {
         this.createdAt = new Date();
         this.uuid = CustomUUIDGenerator.generateShortUUID();
         this.name = "";
@@ -49,9 +49,9 @@ public class Room {
     /**
      * Constructor
      * UUID enforced and uses a short ID format
-     * @param name Name of room
+     * @param name Name of workspace
      */
-    public Room(String name) {
+    public Workspace(String name) {
         this.createdAt = new Date();
         this.uuid = CustomUUIDGenerator.generateShortUUID();
         this.name = name;
@@ -75,7 +75,7 @@ public class Room {
     }
 
     /**
-     * Get name of room
+     * Get name of workspace
      * @return name
      */
     public String getName() {
@@ -83,7 +83,7 @@ public class Room {
     }
 
     /**
-     * Set name for room
+     * Set name for workspace
      * @param name
      */
     public void setName(String name) {
@@ -91,7 +91,7 @@ public class Room {
     }
 
     /**
-     * Get a list of DB references of all users linked to this room
+     * Get a list of DB references of all users linked to this workspace
      * @return List of references
      */
     public List<String> getUserReferences() {
@@ -101,7 +101,7 @@ public class Room {
     @Override
     public String toString() {
         return String.format(
-                "Room[id=%s, uuid=%s, name='%s']",
+                "Workspace[id=%s, uuid=%s, name='%s']",
                 id, uuid, name);
     }
 
