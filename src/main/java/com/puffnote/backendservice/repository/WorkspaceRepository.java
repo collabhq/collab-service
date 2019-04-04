@@ -1,6 +1,6 @@
 package com.puffnote.backendservice.repository;
 
-import com.puffnote.backendservice.model.Room;
+import com.puffnote.backendservice.model.Workspace;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.rest.core.annotation.RestResource;
 
@@ -9,21 +9,21 @@ import org.springframework.data.rest.core.annotation.RestResource;
  */
 
 /**
- * Data repository class used to implement data access on Room objects
+ * Data repository class used to implement data access on Workspace objects
  */
 @RestResource(exported = false)
-public interface RoomRepository extends MongoRepository<Room,String> {
+public interface WorkspaceRepository extends MongoRepository<Workspace,String> {
     /**
      * Find room object by name
      * @param name
-     * @return Room object found
+     * @return Workspace object found
      */
-    public Room findByName(String name);
+    public Workspace findByName(String name);
 
     /**
      * Find room object by uuid
      * @param uuid
-     * @return Room object found
+     * @return Workspace object found
      */
-    public Room findByUuid(String uuid);
+    public Workspace findByUUID(String uuid);
 }

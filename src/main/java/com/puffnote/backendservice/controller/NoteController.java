@@ -17,7 +17,7 @@ import java.util.List;
 @Controller
 public interface NoteController {
     @MessageMapping("/note/{identifier}")
-    @SendTo("/topic/room/{identifier}")
+    @SendTo("/topic/workspace/{identifier}")
     Note patchNote(@Payload NoteOperationObject payload);
 
     @RequestMapping(value = "/note/{userUUID}",

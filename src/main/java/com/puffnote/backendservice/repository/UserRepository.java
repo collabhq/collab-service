@@ -25,6 +25,6 @@ public interface UserRepository extends MongoRepository<User,String> {
      * @param uuid
      * @return User object found
      */
-    public User findByUuid(String uuid);
+    public User findByUUID(String uuid);
 }
 

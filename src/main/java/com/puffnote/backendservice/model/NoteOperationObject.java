@@ -25,8 +25,8 @@ public class NoteOperationObject {
     }
 
     /**
-     * Get Room UUID
-     * @return Room UUID
+     * Get Workspace UUID
+     * @return Workspace UUID
      */
     public String getRoomUUID() {
         return roomUUID;

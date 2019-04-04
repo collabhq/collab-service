@@ -1,19 +1,16 @@
 package com.puffnote.backendservice.controller;
 
-import com.mongodb.util.JSON;
 import com.puffnote.backendservice.model.Note;
 import com.puffnote.backendservice.model.NoteOperationObject;
 import com.puffnote.backendservice.model.User;
 import com.puffnote.backendservice.service.NoteService;
-import com.puffnote.backendservice.service.RoomService;
+import com.puffnote.backendservice.service.WorkspaceService;
 import com.puffnote.backendservice.service.UserService;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +30,7 @@ public class NoteControllerImpl implements NoteController {
     private NoteService noteService;
 
     @Autowired
-    private RoomService roomService;
+    private WorkspaceService workspaceService;
 
     /***
      * Performs a patch operation on the note model

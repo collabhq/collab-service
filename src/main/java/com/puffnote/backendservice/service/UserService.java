@@ -110,7 +110,7 @@ public interface UserService {
     void removeNoteFromUserByUuid(String userUuid, String noteUuid);
 
     /**
-     * List all User objects referred to in Room object by uuid
+     * List all User objects referred to in Workspace object by uuid
      * @param uuid
      * @return List of all User objects found
      */

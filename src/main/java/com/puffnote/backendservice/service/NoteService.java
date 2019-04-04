@@ -74,7 +74,7 @@ public interface NoteService {
     List<Note> listAllNotesByUserUuid(String uuid);
 
     /**
-     * List all Note objects by Room uuid
+     * List all Note objects by Workspace uuid
      * @param uuid
      * @return List of all Note objects found
      */

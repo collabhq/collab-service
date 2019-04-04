@@ -19,8 +19,8 @@ import java.util.List;
  * Class that represents a room object
  */
 @JsonIgnoreProperties({"id", "userReferences"})
-@Document(collection = "rooms")
-public class Room {
+@Document(collection = "workspaces")
+public class Workspace {
     @Id
     private String id;
 
@@ -39,7 +39,7 @@ public class Room {
      * No-arg Constructor
      * UUID enforced and uses a short ID format
      */
-    public Room() {
+    public Workspace() {
         this.createdAt = new Date();
         this.uuid = CustomUUIDGenerator.generateShortUUID();
         this.name = "";
@@ -51,7 +51,7 @@ public class Room {
      * UUID enforced and uses a short ID format
      * @param name Name of room
      */
-    public Room(String name) {
+    public Workspace(String name) {
         this.createdAt = new Date();
         this.uuid = CustomUUIDGenerator.generateShortUUID();
         this.name = name;
@@ -101,7 +101,7 @@ public class Room {
     @Override
     public String toString() {
         return String.format(
-                "Room[id=%s, uuid=%s, name='%s']",
+                "Workspace[id=%s, uuid=%s, name='%s']",
                 id, uuid, name);
     }
 
