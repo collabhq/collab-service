@@ -22,6 +22,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         corsConfiguration.setAllowedOrigins(allowedOriginsList);
         corsConfiguration.setAllowCredentials(true);
 
+        corsConfiguration.applyPermitDefaultValues();
+
         http.cors().configurationSource(request -> corsConfiguration);
         http.csrf().disable().authorizeRequests().anyRequest().permitAll();
     }

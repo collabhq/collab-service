@@ -101,26 +101,26 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public void removeUserFromWorkspace(Workspace workspace, User user) {
-        workspace.getUserReferences().removeIf(reference -> (reference == user.getId()));
+        workspace.getUserReferences().removeIf((String reference) -> user.getId().equals(reference));
         workspaceRepository.save(workspace);
-        logger.info("Removed User: " + user + " to workspace: " + workspace);
+        logger.info("Removed User: " + user + " from workspace: " + workspace);
     }
 
     @Override
     public void removeUserFromWorkspaceById(String workspaceId, String userId) {
         Workspace workspace = this.findById(workspaceId);
-        workspace.getUserReferences().removeIf(reference -> (reference == userId));
+        workspace.getUserReferences().removeIf((String reference) -> userId.equals(reference));
         workspaceRepository.save(workspace);
-        logger.info("Removed User with Id: " + userId + " to workspace: " + workspace);
+        logger.info("Removed User with Id: " + userId + " from workspace: " + workspace);
     }
 
     @Override
     public void removeUserFromWorkspaceByUuid(String workspaceUUID, String userUUID) {
         Workspace workspace = this.findByUuid(workspaceUUID);
         User user = userRepository.findByUuid(userUUID);
-        workspace.getUserReferences().removeIf(reference -> (reference == user.getId()));
+        workspace.getUserReferences().removeIf((String reference) -> user.getId().equals(reference));
         workspaceRepository.save(workspace);
-        logger.info("Removed User with Uuid: " + userUUID + " to workspace: " + workspace);
+        logger.info("Removed User with Uuid: " + userUUID + " from workspace: " + workspace);
     }
 
 }
