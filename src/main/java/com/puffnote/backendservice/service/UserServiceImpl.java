@@ -109,26 +109,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void removeNoteFromUser(User user, Note note) {
-        user.getNotesReferences().removeIf(reference -> (reference == note.getId()));
+        user.getNotesReferences().removeIf((String reference) -> note.getId().equals(reference));
         userRepository.save(user);
-        logger.info("Removed Note: " + note + " to User: " + user);
+        logger.info("Removed Note: " + note + " from User: " + user);
     }
 
     @Override
     public void removeNoteFromUserById(String userId, String noteId) {
         User user = this.findById(userId);
-        user.getNotesReferences().removeIf(reference -> (reference == noteId));
+        user.getNotesReferences().removeIf((String reference) -> noteId.equals(reference));
         userRepository.save(user);
-        logger.info("Removed Note with Id: " + noteId + " to User: " + user);
+        logger.info("Removed Note with Id: " + noteId + " from User: " + user);
     }
 
     @Override
     public void removeNoteFromUserByUuid(String userUuid, String noteUuid) {
         User user = this.findByUuid(userUuid);
         Note note = noteRepository.findByUuid(noteUuid);
-        user.getNotesReferences().removeIf(reference -> (reference == note.getId()));
+        user.getNotesReferences().removeIf((String reference) -> note.getId().equals(reference));
         userRepository.save(user);
-        logger.info("Removed Note with UUID: " + noteUuid + " to User: " + user);
+        logger.info("Removed Note with UUID: " + noteUuid + " from User: " + user);
     }
 
     @Override
