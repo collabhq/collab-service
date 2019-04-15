@@ -17,6 +17,8 @@ deploy:
   region: eu-central-1
   access_key_id: $AWS_ACCESS_KEY_ID
   secret_access_key: $AWS_ACCESS_KEY
+  on:
+    branch: dev
 notifications:
   slack:
     secure: jvJ0e4l4YtZCJKqw46fVKOELgQvLxOXwvXiYgJ8YL36QKKcJq1qhLoRzSOwrBqLBswCrHohiafbf/hxhBAu/nYKQN4YekWzKlZXi4VJlLWOR9WpCiSHNYCv8T13Y3SKhWIF58YlWOGy0a7okAV3S8HHzfmOb2B6CirSwYtaSqPcc+LJ0ywDacP5ExVPg17bu/3+Dog6JjW6Y/yz/pVVKcErQvcCoRkk9PFFgHY4ebzj3ORA20FbZrL/BDu+VXaDj7dkUde4qeVqW9+CFs3SPeib50ZdttNLB7OeQU3MZpseSLphePwrgEfHqKMztSEtvXG5SttA3lyfxwgcajI0LctMbyGiS9rzIKij57EFH5kqFBDwwhnAtF/c0LbPkoyqZ+nmkwSU7P9z79bovOiQ3BGwtCB0MA2mYz88q5r31jBmFy05Ya1qc7sz6a6PON1fvtSCT73VFrWwCd3yRsD1weZo1OrVIIWhLULUwV9yDz77rDMhLW01I3NFL6rnqW/9RawOpK7wGujFKM7FWUOi6um51BLQGwEltopQclXH95+GBG+w+yE8t/amh+QRoIYs4WsCs/MLbAAB+65WqgelAO1gFNnPUeQ+7kk3mTWMhHwdZj27OjCJkrRugxKatcIAvsPBgnCQCR/yDwNoOH23lSfuzWbYV8DKN6+to0Z+XEsA=
