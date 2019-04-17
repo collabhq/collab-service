@@ -52,18 +52,21 @@ public class WorkspaceControllerImpl implements WorkspaceController {
     /**
      * Adds a user to the workspace by their identifier
      * @param identifier Workspace Identifier
-     * @param username Username
+     * @param reqBody reqBody
      * @return HashMap containing workspaceUUID & userUUID
      */
     @Override
-    public HashMap joinWorkspace(String identifier, String username) {
+    public HashMap joinWorkspace(String identifier, HashMap reqBody) {
+        //TODO: Add a model object instead of HashMap as request body
+        Object username = reqBody.get("username");
         HashMap<String, String> output = new HashMap<>();
         Workspace workspace = workspaceService.findByUuid(identifier);
         if(workspace != null) {
-            User user = new User(username);
+            User user = new User(username.toString());
             userService.saveOrUpdate(user);
             workspaceService.addUserToWorkspace(workspace, user);
             output.put("workspaceUUID", workspace.getUUID());
+            output.put("workspaceName", workspace.getName());
             output.put("userUUID", user.getUUID());
         }
         //TODO: Throw custom exception when workspace is not found

@@ -18,5 +18,5 @@ public interface WorkspaceController {
     @PostMapping(value = "/workspace/{identifier}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    HashMap joinWorkspace(@PathVariable String identifier, @RequestBody String username);
+    HashMap joinWorkspace(@PathVariable String identifier, @RequestBody HashMap reqBody);
 }
