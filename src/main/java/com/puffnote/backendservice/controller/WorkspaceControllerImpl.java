@@ -1,16 +1,20 @@
 package com.puffnote.backendservice.controller;
 
+import com.puffnote.backendservice.component.DeleteWorkspaceTask;
 import com.puffnote.backendservice.model.Workspace;
 import com.puffnote.backendservice.model.User;
 import com.puffnote.backendservice.service.MetricsService;
 import com.puffnote.backendservice.service.NoteService;
 import com.puffnote.backendservice.service.WorkspaceService;
 import com.puffnote.backendservice.service.UserService;
+import com.puffnote.backendservice.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -29,6 +33,8 @@ public class WorkspaceControllerImpl implements WorkspaceController {
     private NoteService noteService;
     @Autowired
     private MetricsService metricsService;
+    @Autowired
+    private ThreadPoolTaskScheduler taskScheduler;
 
     /**
      * Creates a new workspace and adds the creator to it
@@ -52,6 +58,14 @@ public class WorkspaceControllerImpl implements WorkspaceController {
         // Update metrics
         metricsService.incrementUserMetric();
         metricsService.incrementWorkspaceMetric();
+        // Schedule workspace deletion task
+        taskScheduler.schedule(
+                new DeleteWorkspaceTask(
+                        workspace.getUUID(),
+                        workspaceService,
+                        userService,
+                        noteService), new Date(new Date().getTime() + Constants.DEFAULT_DOCUMENT_EXPIRY_TIME_MILLISECONDS));// 48 hours
+        logger.info("Task scheduled for Workspace deletion at "+ new Date());
         HashMap<String, String> output = new HashMap<>();
         output.put("workspaceUUID", workspace.getUUID());
         output.put("userUUID", user.getUUID());

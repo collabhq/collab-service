@@ -31,6 +31,7 @@ public final class Constants {
 
     //Constants for time
     public static final int DEFAULT_DOCUMENT_EXPIRY_TIME_SECONDS = 172800;//~48 hours
+    public static final int DEFAULT_DOCUMENT_EXPIRY_TIME_MILLISECONDS = 172800 * 1000;//~48 hours
 
     //Constant for Metrics Document
     public static final String METRICS_UNIQUE_INDEX = "ZkHjqI9H";

@@ -27,8 +27,6 @@ public class Workspace {
     @Indexed(unique = true)
     private String uuid;//Use separate UUID for reference
 
-    //We persist data only for 48 hours from creation
-    @Indexed(name ="createdAt", expireAfterSeconds = Constants.DEFAULT_DOCUMENT_EXPIRY_TIME_SECONDS)
     private Date createdAt;
 
     private String name;
