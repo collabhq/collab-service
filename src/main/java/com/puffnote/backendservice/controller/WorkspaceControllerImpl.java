@@ -2,6 +2,7 @@ package com.puffnote.backendservice.controller;
 
 import com.puffnote.backendservice.model.Workspace;
 import com.puffnote.backendservice.model.User;
+import com.puffnote.backendservice.service.MetricsService;
 import com.puffnote.backendservice.service.NoteService;
 import com.puffnote.backendservice.service.WorkspaceService;
 import com.puffnote.backendservice.service.UserService;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
-import java.util.stream.Stream;
 
 /**
  * Created by sudeshgutta on 2019-03-12
@@ -27,6 +27,8 @@ public class WorkspaceControllerImpl implements WorkspaceController {
     private UserService userService;
     @Autowired
     private NoteService noteService;
+    @Autowired
+    private MetricsService metricsService;
 
     /**
      * Creates a new workspace and adds the creator to it
@@ -47,6 +49,9 @@ public class WorkspaceControllerImpl implements WorkspaceController {
         userService.saveOrUpdate(user);
         workspaceService.saveOrUpdate(workspace);
         workspaceService.addUserToWorkspace(workspace, user);
+        // Update metrics
+        metricsService.incrementUserMetric();
+        metricsService.incrementWorkspaceMetric();
         HashMap<String, String> output = new HashMap<>();
         output.put("workspaceUUID", workspace.getUUID());
         output.put("userUUID", user.getUUID());
@@ -69,6 +74,7 @@ public class WorkspaceControllerImpl implements WorkspaceController {
             User user = new User(username.toString());
             userService.saveOrUpdate(user);
             workspaceService.addUserToWorkspace(workspace, user);
+            metricsService.incrementUserMetric();
 
             output.put("workspaceUUID", workspace.getUUID());
             output.put("workspaceName", workspace.getName());
