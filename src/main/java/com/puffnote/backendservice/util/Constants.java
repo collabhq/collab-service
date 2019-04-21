@@ -54,7 +54,7 @@ public final class Constants {
                 result = DOCUMENT_EXPIRY_TIME_12HOUR;
                 break;
             case "HOUR24":
-                result = DOCUMENT_EXPIRY_TIME_12HOUR;
+                result = DOCUMENT_EXPIRY_TIME_24HOUR;
                 break;
             case "HOUR48":
                 result = DEFAULT_DOCUMENT_EXPIRY_TIME_MILLISECONDS;
