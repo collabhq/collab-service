@@ -64,7 +64,8 @@ public class WorkspaceControllerImpl implements WorkspaceController {
                         workspace.getUUID(),
                         workspaceService,
                         userService,
-                        noteService), new Date(new Date().getTime() + Constants.DEFAULT_DOCUMENT_EXPIRY_TIME_MILLISECONDS));// 48 hours
+                        noteService),
+                new Date(new Date().getTime() + Constants.getDocumentDeletionTime(reqBody.get("expiry").toString())));
         logger.info("Task scheduled for Workspace deletion at "+ new Date());
         HashMap<String, String> output = new HashMap<>();
         output.put("workspaceUUID", workspace.getUUID());
