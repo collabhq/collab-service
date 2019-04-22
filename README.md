@@ -1,5 +1,5 @@
 # Collab-Spring Backend Service
-[![Build Status](https://travis-ci.org/collab/collab-service.svg?branch=master)](https://travis-ci.org/collab/collab-service)
+[![Build Status](https://travis-ci.org/collabhq/collab-service.svg?branch=master)](https://travis-ci.org/collabhq/collab-service)
 
 This is the Spring based backend service for collab.
 
