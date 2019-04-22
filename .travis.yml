@@ -12,7 +12,7 @@ deploy:
   skip_cleanup: true
   app: $AWS_APP_NAME
   env: $AWS_ENV_NAME
-  zip_file: 'target/backend-service-0.0.1-SNAPSHOT.war'
+  zip_file: 'target/collab-service-0.0.1-SNAPSHOT.war'
   bucket_name: $AWS_BUCKET_NAME
   region: eu-central-1
   access_key_id: $AWS_ACCESS_KEY_ID
