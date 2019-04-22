@@ -48,6 +48,7 @@ public class NoteControllerImpl implements NoteController {
                         note.setName(payload.getNoteName());
                     if(payload.getNoteValue() != null)
                         note.setValue(payload.getNoteValue());
+                    note.setUserUUID(payload.getUserUUID());
                     noteService.saveOrUpdate(note);
                     userService.addNoteToUserByUuid(payload.getUserUUID(), note.getUUID());
                     break;

@@ -26,6 +26,7 @@ public class Note {
     private String uuid;//Use separate UUID for reference
 
     private Date createdAt;
+    private String userUUID;//UUID of user that has created note
 
     private String name;
     private String value;//String containing markdown text
@@ -99,6 +100,22 @@ public class Note {
      */
     public void setValue(String value) {
         this.value = value;
+    }
+
+    /**
+     * Get User UUID
+     * @return UUID
+     */
+    public String getUserUUID() {
+        return userUUID;
+    }
+
+    /**
+     * Set User UUID
+     * @param userUUID
+     */
+    public void setUserUUID(String userUUID) {
+        this.userUUID = userUUID;
     }
 
     @Override
