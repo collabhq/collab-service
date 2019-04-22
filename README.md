@@ -1,7 +1,7 @@
-# Puffnote-Spring Backend Service
-[![Build Status](https://travis-ci.org/puffnote/backend-service.svg?branch=master)](https://travis-ci.org/puffnote/backend-service)
+# Collab-Spring Backend Service
+[![Build Status](https://travis-ci.org/collabhq/collab-service.svg?branch=master)](https://travis-ci.org/collabhq/collab-service)
 
-This is the Spring based backend service for puffnote.
+This is the Spring based backend service for collab.
 
 # Prerequisites
 JDK 11

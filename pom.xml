@@ -8,11 +8,11 @@
 		<version>2.1.3.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.puffnote</groupId>
-	<artifactId>backend-service</artifactId>
+	<groupId>com.collab</groupId>
+	<artifactId>collab-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>backend-service</name>
-	<description>Backend service for Puffnote</description>
+	<name>collab-service</name>
+	<description>Backend service for Collab</description>
 	<packaging>war</packaging>
 
 	<properties>
