@@ -6,8 +6,9 @@ package com.collab.backendservice.model;
 public class SocketResponse {
 
     public enum SocketResponseType {
-        NOTE,
-        USER
+        SAVE_NOTE,
+        USER,
+        DELETE_NOTE
     }
 
     private SocketResponseType type;

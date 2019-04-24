@@ -43,6 +43,7 @@ public class NoteControllerImpl implements NoteController {
     @Override
     public SocketResponse patchNote(NoteOperationObject payload) {
         Note note = null;
+        SocketResponse socketResponse = null;
         if(payload != null) {
             switch (payload.getNoteOperation()) {
                 case ADD:
@@ -54,6 +55,7 @@ public class NoteControllerImpl implements NoteController {
                     note.setUserUUID(payload.getUserUUID());
                     noteService.saveOrUpdate(note);
                     userService.addNoteToUserByUuid(payload.getUserUUID(), note.getUUID());
+                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.SAVE_NOTE, note);
                     break;
                 case EDIT:
                     note = noteService.findByUuid(payload.getNoteUUID());
@@ -64,6 +66,7 @@ public class NoteControllerImpl implements NoteController {
                             note.setValue(payload.getNoteValue());
                         noteService.saveOrUpdate(note);
                     }
+                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.SAVE_NOTE, note);
                     //TODO: Throw custom exception for note not being found
                     break;
                 case DELETE:
@@ -72,6 +75,7 @@ public class NoteControllerImpl implements NoteController {
                         userService.removeNoteFromUserByUuid(payload.getUserUUID(), payload.getNoteUUID());
                         noteService.deleteById(note.getId());
                     }
+                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.DELETE_NOTE, note);
                     //TODO: Throw custom exception for note not being found
                     break;
                 default:
@@ -79,7 +83,7 @@ public class NoteControllerImpl implements NoteController {
             }
         }
         //TODO: Throw custom exception as payload is empty
-        return new SocketResponse(SocketResponse.SocketResponseType.NOTE, note);
+        return socketResponse;
     }
 
     /**
