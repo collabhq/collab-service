@@ -1,6 +1,7 @@
 package com.collab.backendservice.controller;
 
 import com.collab.backendservice.component.DeleteWorkspaceTask;
+import com.collab.backendservice.model.SocketResponse;
 import com.collab.backendservice.model.Workspace;
 import com.collab.backendservice.model.User;
 import com.collab.backendservice.service.MetricsService;
@@ -11,6 +12,7 @@ import com.collab.backendservice.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +37,8 @@ public class WorkspaceControllerImpl implements WorkspaceController {
     private MetricsService metricsService;
     @Autowired
     private ThreadPoolTaskScheduler taskScheduler;
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     /**
      * Creates a new workspace and adds the creator to it
@@ -67,9 +71,10 @@ public class WorkspaceControllerImpl implements WorkspaceController {
                         noteService),
                 new Date(new Date().getTime() + Constants.getDocumentDeletionTime(reqBody.get("expiry").toString())));
         logger.info("Task scheduled for Workspace deletion at "+ new Date());
-        HashMap<String, String> output = new HashMap<>();
+        HashMap<String, Object> output = new HashMap<>();
         output.put("workspaceUUID", workspace.getUUID());
         output.put("userUUID", user.getUUID());
+        output.put("users", userService.listAllUsersByWorkspaceUuid(workspace.getUUID()));
         return output;
     }
 
@@ -85,8 +90,8 @@ public class WorkspaceControllerImpl implements WorkspaceController {
         Object username = reqBody.get("username");
         HashMap<String, Object> output = new HashMap<>();
         Workspace workspace = workspaceService.findByUuid(identifier);
+        User user = new User(username.toString());
         if(workspace != null) {
-            User user = new User(username.toString());
             userService.saveOrUpdate(user);
             workspaceService.addUserToWorkspace(workspace, user);
             metricsService.incrementUserMetric();
@@ -95,8 +100,12 @@ public class WorkspaceControllerImpl implements WorkspaceController {
             output.put("workspaceName", workspace.getName());
             output.put("userUUID", user.getUUID());
             output.put("notes", noteService.listAllNotesByWorkspaceUuid(workspace.getUUID()));
+            output.put("users", userService.listAllUsersByWorkspaceUuid(workspace.getUUID()));
         }
         //TODO: Throw custom exception when workspace is not found
+        //Notify when a user joins a workspace
+        simpMessagingTemplate.convertAndSend("/topic/workspace/"+identifier,
+                new SocketResponse(SocketResponse.SocketResponseType.USER, user));
         return output;
     }
 }

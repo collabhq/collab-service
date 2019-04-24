@@ -2,15 +2,18 @@ package com.collab.backendservice.controller;
 
 import com.collab.backendservice.model.Note;
 import com.collab.backendservice.model.NoteOperationObject;
+import com.collab.backendservice.model.SocketResponse;
 import com.collab.backendservice.model.User;
 import com.collab.backendservice.service.NoteService;
 import com.collab.backendservice.service.WorkspaceService;
 import com.collab.backendservice.service.UserService;
+import com.collab.backendservice.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +41,7 @@ public class NoteControllerImpl implements NoteController {
      * @return Note
      */
     @Override
-    public Note patchNote(NoteOperationObject payload) {
+    public SocketResponse patchNote(NoteOperationObject payload) {
         Note note = null;
         if(payload != null) {
             switch (payload.getNoteOperation()) {
@@ -76,7 +79,7 @@ public class NoteControllerImpl implements NoteController {
             }
         }
         //TODO: Throw custom exception as payload is empty
-        return note;
+        return new SocketResponse(SocketResponse.SocketResponseType.NOTE, note);
     }
 
     /**
