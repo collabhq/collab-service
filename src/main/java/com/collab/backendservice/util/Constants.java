@@ -15,7 +15,7 @@ public final class Constants {
      */
 
     //ENUMS for Note Operation Object
-    public static enum NoteOperation{
+    public enum NoteOperation {
         ADD,
         EDIT,
         DELETE
