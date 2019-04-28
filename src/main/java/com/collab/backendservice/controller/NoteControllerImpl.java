@@ -7,13 +7,11 @@ import com.collab.backendservice.model.User;
 import com.collab.backendservice.service.NoteService;
 import com.collab.backendservice.service.WorkspaceService;
 import com.collab.backendservice.service.UserService;
-import com.collab.backendservice.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 

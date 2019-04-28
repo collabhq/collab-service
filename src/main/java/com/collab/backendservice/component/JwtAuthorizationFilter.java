@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +32,9 @@ import java.util.stream.Collectors;
  */
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
+
+    @Value("${auth.jwt.secret}")
+    private String JWT_SECRET;
     
     private UserService userService;
 
@@ -52,7 +56,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String token = request.getHeader(Constants.TOKEN_HEADER);
         if (!StringUtils.isEmpty(token)) {
             try {
-                byte[] signingKey = Constants.JWT_SECRET.getBytes();
+                byte[] signingKey = JWT_SECRET.getBytes();
                 Claims claims = Jwts.parser().setSigningKey(signingKey).parseClaimsJws(token.replace("Bearer ", "")).getBody();
                 String userUUID = claims.getSubject();
 

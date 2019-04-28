@@ -42,14 +42,8 @@ public final class Constants {
     public static final String METRICS_UNIQUE_INDEX = "ZkHjqI9H";
 
     //Constants for Security
-    //TODO: Fetch from environment variables
-    public static final String JWT_SECRET = "u7w!z%C*F-JaNdRgUkXp2s5v8y/A?D(G+KbPeShVmYq3t6w9z$C&E)H@McQfTjWn";
     public static final String TOKEN_HEADER = "Authorization";
     public static final String TOKEN_PREFIX = "Bearer ";
-    public static final String TOKEN_TYPE = "JWT";
-    public static final String TOKEN_ISSUER = "collabhq";
-    public static final String TOKEN_AUDIENCE = "collab-app";
-    public static final int TOKEN_EXPIRY = DEFAULT_DOCUMENT_EXPIRY_TIME_MILLISECONDS;
 
     //Methods
     public static int getDocumentDeletionTime(String time){
