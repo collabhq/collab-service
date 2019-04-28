@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().configurationSource(request -> corsConfiguration);
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/workspace", "/workspace/{identifier}").permitAll() //"/collabsocket/** -> Add this to exception list
+                .antMatchers("/workspace", "/workspace/{identifier}", "/collabsocket/**").permitAll()
                 .anyRequest().hasAnyRole("USER")
                 .and()
                 .addFilterAfter(new JwtAuthorizationFilter(),  AnonymousAuthenticationFilter.class)

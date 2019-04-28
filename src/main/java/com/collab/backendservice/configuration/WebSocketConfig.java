@@ -2,11 +2,10 @@ package com.collab.backendservice.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
-import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
 
 import static org.springframework.messaging.simp.SimpMessageType.*;
 
@@ -15,7 +14,7 @@ import static org.springframework.messaging.simp.SimpMessageType.*;
  */
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig extends AbstractSecurityWebSocketMessageBrokerConfigurer {
+public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     /**
      * Configures the STOMP web socket endpoint of service
@@ -37,7 +36,9 @@ public class WebSocketConfig extends AbstractSecurityWebSocketMessageBrokerConfi
         config.enableSimpleBroker("/topic", "/queue");
     }
 
-    /*@Override
+    // TODO: DELETE FOLLOWING COMMENTED CODE AND UNUSED IMPORTS AFTER CONFIRMING FIX
+    /*
+    @Override
     protected void configureInbound(final MessageSecurityMetadataSourceRegistry messages) {
         // You can customize your authorization mapping here.
         messages.simpTypeMatchers(CONNECT, UNSUBSCRIBE, DISCONNECT, HEARTBEAT)
@@ -50,6 +51,27 @@ public class WebSocketConfig extends AbstractSecurityWebSocketMessageBrokerConfi
     @Override
     protected boolean sameOriginDisabled() {
         return true;
-    }*/
+    }
+
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.setInterceptors(new ChannelInterceptorAdapter() {
+
+            @Override
+            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+
+                StompHeaderAccessor accessor =
+                        MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+
+                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+                    Principal user = null; // access authentication header(s)
+                    accessor.setUser(user);
+                }
+
+                return message;
+            }
+        });
+    }
+    */
 }
 
