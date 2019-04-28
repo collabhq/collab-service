@@ -44,7 +44,7 @@ public class NoteControllerImpl implements NoteController {
     public SocketResponse patchNote(NoteOperationObject payload) {
         Note note = null;
         SocketResponse socketResponse = null;
-        if(payload != null) {
+        if(payload != null && userService.isUserPartOfWorkspace(payload.getUserUUID(), payload.getWorkspaceUUID())) {
             switch (payload.getNoteOperation()) {
                 case ADD:
                     note = new Note();

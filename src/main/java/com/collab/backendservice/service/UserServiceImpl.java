@@ -142,4 +142,16 @@ public class UserServiceImpl implements UserService {
         return userList;
     }
 
+    @Override
+    public boolean isUserPartOfWorkspace(String userUuid, String workspaceUuid) {
+        // If user does not exist at all or if user is not part of workspace, return false
+        User user;
+        user = this.findByUuid(userUuid);
+        if(user == null || !user.getWorkspaceUUID().equals(workspaceUuid)) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

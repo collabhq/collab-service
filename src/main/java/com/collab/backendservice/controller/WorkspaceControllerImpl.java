@@ -59,6 +59,7 @@ public class WorkspaceControllerImpl implements WorkspaceController {
             user.setName(username.toString());
             workspace.setName(workspaceName.toString());
         }
+        user.setWorkspaceUUID(workspace.getUUID());
         userService.saveOrUpdate(user);
         workspaceService.saveOrUpdate(workspace);
         workspaceService.addUserToWorkspace(workspace, user);
@@ -96,6 +97,7 @@ public class WorkspaceControllerImpl implements WorkspaceController {
         Workspace workspace = workspaceService.findByUuid(identifier);
         User user = new User(username.toString());
         if(workspace != null) {
+            user.setWorkspaceUUID(workspace.getUUID());
             userService.saveOrUpdate(user);
             workspaceService.addUserToWorkspace(workspace, user);
             metricsService.incrementUserMetric();
