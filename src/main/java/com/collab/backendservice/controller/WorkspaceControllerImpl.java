@@ -1,6 +1,7 @@
 package com.collab.backendservice.controller;
 
 import com.collab.backendservice.component.DeleteWorkspaceTask;
+import com.collab.backendservice.component.JwtTokenBuilder;
 import com.collab.backendservice.model.SocketResponse;
 import com.collab.backendservice.model.Workspace;
 import com.collab.backendservice.model.User;
@@ -27,6 +28,8 @@ public class WorkspaceControllerImpl implements WorkspaceController {
 
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceControllerImpl.class);
 
+    @Autowired
+    private JwtTokenBuilder jwtTokenBuilder;
     @Autowired
     private WorkspaceService workspaceService;
     @Autowired
@@ -56,6 +59,7 @@ public class WorkspaceControllerImpl implements WorkspaceController {
             user.setName(username.toString());
             workspace.setName(workspaceName.toString());
         }
+        user.setWorkspaceUUID(workspace.getUUID());
         userService.saveOrUpdate(user);
         workspaceService.saveOrUpdate(workspace);
         workspaceService.addUserToWorkspace(workspace, user);
@@ -75,6 +79,7 @@ public class WorkspaceControllerImpl implements WorkspaceController {
         output.put("workspaceUUID", workspace.getUUID());
         output.put("userUUID", user.getUUID());
         output.put("users", userService.listAllUsersByWorkspaceUuid(workspace.getUUID()));
+        output.put("jwt", jwtTokenBuilder.buildJwtToken(user.getUUID()));
         return output;
     }
 
@@ -92,6 +97,7 @@ public class WorkspaceControllerImpl implements WorkspaceController {
         Workspace workspace = workspaceService.findByUuid(identifier);
         User user = new User(username.toString());
         if(workspace != null) {
+            user.setWorkspaceUUID(workspace.getUUID());
             userService.saveOrUpdate(user);
             workspaceService.addUserToWorkspace(workspace, user);
             metricsService.incrementUserMetric();
@@ -101,6 +107,7 @@ public class WorkspaceControllerImpl implements WorkspaceController {
             output.put("userUUID", user.getUUID());
             output.put("notes", noteService.listAllNotesByWorkspaceUuid(workspace.getUUID()));
             output.put("users", userService.listAllUsersByWorkspaceUuid(workspace.getUUID()));
+            output.put("jwt", jwtTokenBuilder.buildJwtToken(user.getUUID()));
         }
         //TODO: Throw custom exception when workspace is not found
         //Notify when a user joins a workspace

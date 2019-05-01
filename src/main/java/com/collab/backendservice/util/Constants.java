@@ -41,6 +41,10 @@ public final class Constants {
     //Constant for Metrics Document
     public static final String METRICS_UNIQUE_INDEX = "ZkHjqI9H";
 
+    //Constants for Security
+    public static final String TOKEN_HEADER = "Authorization";
+    public static final String TOKEN_PREFIX = "Bearer ";
+
     //Methods
     public static int getDocumentDeletionTime(String time){
         // Use default time of 48 hours.
