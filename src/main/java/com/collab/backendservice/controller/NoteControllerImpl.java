@@ -1,10 +1,7 @@
 package com.collab.backendservice.controller;
 
 import com.collab.backendservice.exception.CollabException;
-import com.collab.backendservice.model.Note;
-import com.collab.backendservice.model.NoteOperationObject;
-import com.collab.backendservice.model.SocketResponse;
-import com.collab.backendservice.model.User;
+import com.collab.backendservice.model.*;
 import com.collab.backendservice.service.NoteService;
 import com.collab.backendservice.service.WorkspaceService;
 import com.collab.backendservice.service.UserService;
@@ -57,7 +54,7 @@ public class NoteControllerImpl implements NoteController {
                     note.setUserUUID(payload.getUserUUID());
                     noteService.saveOrUpdate(note);
                     userService.addNoteToUserByUuid(payload.getUserUUID(), note.getUUID());
-                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.SAVE_NOTE, note);
+                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.SAVE_NOTE, new NoteResponseObject(note));
                     break;
                 case EDIT:
                     note = noteService.findByUuid(payload.getNoteUUID());
@@ -68,7 +65,7 @@ public class NoteControllerImpl implements NoteController {
                             note.setValue(payload.getNoteValue());
                         noteService.saveOrUpdate(note);
                     }
-                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.SAVE_NOTE, note);
+                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.SAVE_NOTE, new NoteResponseObject(note));
                     //TODO: Throw custom exception for note not being found
                     break;
                 case DELETE:
@@ -77,7 +74,7 @@ public class NoteControllerImpl implements NoteController {
                         userService.removeNoteFromUserByUuid(payload.getUserUUID(), payload.getNoteUUID());
                         noteService.deleteById(note.getId());
                     }
-                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.DELETE_NOTE, note);
+                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.DELETE_NOTE, new NoteResponseObject(note));
                     //TODO: Throw custom exception for note not being found
                     break;
                 default:
