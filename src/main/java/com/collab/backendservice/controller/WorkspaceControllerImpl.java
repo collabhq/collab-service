@@ -61,6 +61,10 @@ public class WorkspaceControllerImpl implements WorkspaceController {
         }
         user.setWorkspaceUUID(workspace.getUUID());
         userService.saveOrUpdate(user);
+        // Set expiry to workspace object
+        workspace.setExpiry(Constants.getDocumentDeletionTime(reqBody.get("expiry").toString()));
+        // Set workspace deletion date
+        Date workspaceDeletionDate = new Date(new Date().getTime() + Constants.getDocumentDeletionTime(reqBody.get("expiry").toString()));
         workspaceService.saveOrUpdate(workspace);
         workspaceService.addUserToWorkspace(workspace, user);
         // Update metrics
@@ -73,8 +77,8 @@ public class WorkspaceControllerImpl implements WorkspaceController {
                         workspaceService,
                         userService,
                         noteService),
-                new Date(new Date().getTime() + Constants.getDocumentDeletionTime(reqBody.get("expiry").toString())));
-        logger.info("Task scheduled for Workspace deletion at "+ new Date());
+                workspaceDeletionDate);
+        logger.info("Task scheduled for Workspace deletion at "+ workspaceDeletionDate);
         HashMap<String, Object> output = new HashMap<>();
         output.put("workspaceUUID", workspace.getUUID());
         output.put("userUUID", user.getUUID());
