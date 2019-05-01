@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,6 +34,9 @@ import java.util.stream.Collectors;
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
+    @Autowired
+    ServletContext servletContext;
+
     @Value("${auth.jwt.secret}")
     private String JWT_SECRET;
     
@@ -47,13 +51,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        SecurityContextHolder.getContext().setAuthentication(getAuthentication(request));
+        SecurityContextHolder.getContext().setAuthentication(getAuthentication(request.getHeader(Constants.TOKEN_HEADER)));
         filterChain.doFilter(request, response);
     }
 
-    private AnonymousAuthenticationToken getAuthentication(HttpServletRequest request) {
+    /**
+     * Gets an anonymous auth token for the given JWT
+     * @param token Token
+     * @return AnonymousAuthenticationToken
+     */
+    public AnonymousAuthenticationToken getAuthentication(String token) {
         AnonymousAuthenticationToken anonymousAuthenticationToken = null;
-        String token = request.getHeader(Constants.TOKEN_HEADER);
         if (!StringUtils.isEmpty(token)) {
             try {
                 byte[] signingKey = JWT_SECRET.getBytes();
@@ -66,10 +74,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         .collect(Collectors.toList());
 
                 if(userService == null) {
-                    ServletContext servletContext = request.getServletContext();
                     WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
                     userService = webApplicationContext.getBean(UserService.class);
                 }
+
                 User user = userService.findByUuid(userUUID);
                 if (user != null) {
                     anonymousAuthenticationToken = new AnonymousAuthenticationToken(userUUID, user, authorities);

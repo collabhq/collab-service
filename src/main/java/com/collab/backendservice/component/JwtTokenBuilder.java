@@ -1,6 +1,5 @@
 package com.collab.backendservice.component;
 
-import com.collab.backendservice.util.Constants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -32,18 +31,22 @@ public class JwtTokenBuilder {
     @Value("${auth.jwt.expiryms}")
     private int TOKEN_EXPIRY;
 
+    /***
+     * Build a JWT for the give user UUID
+     * @param userUUID userUUID
+     * @return JWT Token
+     */
     public String buildJwtToken(String userUUID) {
-        List roles = new ArrayList<>();
+        List<String> roles = new ArrayList<>();
         roles.add("ROLE_USER");
 
         byte[] signingKey = JWT_SECRET.getBytes();
-        String token = Jwts.builder().signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
+        return Jwts.builder().signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
                 .setHeaderParam("typ", TOKEN_TYPE)
                 .setIssuer(TOKEN_ISSUER)
                 .setAudience(TOKEN_AUDIENCE)
                 .setSubject(userUUID)
                 .claim("rol", roles)
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRY)).compact();
-        return token;
     }
 }
