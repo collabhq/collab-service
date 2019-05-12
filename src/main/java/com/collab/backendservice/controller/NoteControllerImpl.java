@@ -42,6 +42,7 @@ public class NoteControllerImpl implements NoteController {
     public SocketResponse patchNote(Principal principal, NoteOperationObject payload) {
         Note note;
         SocketResponse socketResponse = null;
+        NoteResponseObject noteResponseObject;
         String principalUserUUID = ((User)((AnonymousAuthenticationToken) principal).getPrincipal()).getUUID();
         if(payload != null && userService.isUserPartOfWorkspace(principalUserUUID , payload.getWorkspaceUUID())) {
             switch (payload.getNoteOperation()) {
@@ -54,7 +55,8 @@ public class NoteControllerImpl implements NoteController {
                     note.setUserUUID(payload.getUserUUID());
                     noteService.saveOrUpdate(note);
                     userService.addNoteToUserByUuid(payload.getUserUUID(), note.getUUID());
-                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.SAVE_NOTE, new NoteResponseObject(note));
+                    noteResponseObject = new NoteResponseObject(note);
+                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.SAVE_NOTE, noteResponseObject);
                     break;
                 case EDIT:
                     note = noteService.findByUuid(payload.getNoteUUID());
@@ -65,7 +67,8 @@ public class NoteControllerImpl implements NoteController {
                             note.setValue(payload.getNoteValue());
                         noteService.saveOrUpdate(note);
                     }
-                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.SAVE_NOTE, new NoteResponseObject(note));
+                    noteResponseObject = new NoteResponseObject(note);
+                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.SAVE_NOTE, noteResponseObject);
                     //TODO: Throw custom exception for note not being found
                     break;
                 case DELETE:
@@ -74,7 +77,8 @@ public class NoteControllerImpl implements NoteController {
                         userService.removeNoteFromUserByUuid(payload.getUserUUID(), payload.getNoteUUID());
                         noteService.deleteById(note.getId());
                     }
-                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.DELETE_NOTE, new NoteResponseObject(note));
+                    noteResponseObject = new NoteResponseObject(note);
+                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.DELETE_NOTE, noteResponseObject);
                     //TODO: Throw custom exception for note not being found
                     break;
                 default:
