@@ -8,7 +8,8 @@ public class SocketResponse {
     public enum SocketResponseType {
         SAVE_NOTE,
         USER,
-        DELETE_NOTE
+        DELETE_NOTE,
+        DELETE_WORKSPACE
     }
 
     private SocketResponseType type;

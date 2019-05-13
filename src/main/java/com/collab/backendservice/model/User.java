@@ -28,6 +28,7 @@ public class User {
     private String uuid;//Use separate UUID for reference
 
     private Date createdAt;
+    private String workspaceUUID;//Workspace user belongs to
 
     private String name;
 
@@ -86,6 +87,22 @@ public class User {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Get workspace UUID of this user
+     * @return workspaceUUID
+     */
+    public String getWorkspaceUUID() {
+        return workspaceUUID;
+    }
+
+    /**
+     * Set workspace UUID for this user
+     * @param workspaceUUID
+     */
+    public void setWorkspaceUUID(String workspaceUUID) {
+        this.workspaceUUID = workspaceUUID;
     }
 
     /**

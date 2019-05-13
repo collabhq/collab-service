@@ -115,4 +115,12 @@ public interface UserService {
      * @return List of all User objects found
      */
     List<User> listAllUsersByWorkspaceUuid(String uuid);
+
+    /**
+     * Check if User is part of Workspace
+     * @param userUuid
+     * @param workspaceUuid
+     * @return True if user exists in workspace
+     */
+    boolean isUserPartOfWorkspace(String userUuid, String workspaceUuid);
 }
