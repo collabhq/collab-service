@@ -1,12 +1,15 @@
 package com.collab.backendservice.component;
 
 import com.collab.backendservice.model.Note;
+import com.collab.backendservice.model.SocketResponse;
 import com.collab.backendservice.model.User;
 import com.collab.backendservice.service.NoteService;
 import com.collab.backendservice.service.UserService;
 import com.collab.backendservice.service.WorkspaceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -28,6 +31,9 @@ public class DeleteWorkspaceTask implements Runnable {
     private WorkspaceService workspaceService;
     private UserService userService;
     private NoteService noteService;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     /**
      * No-arg Constructor
@@ -70,6 +76,10 @@ public class DeleteWorkspaceTask implements Runnable {
         // Handle Workspace deletion
         workspaceService.delete(workspaceService.findByUuid(this.workspaceUuid));
         logger.info("Workspace with "+workspaceUuid+" deleted at "+new Date());
+
+        //Notify when a workspace is deleted to connected clients
+        simpMessagingTemplate.convertAndSend("/topic/workspace/"+this.workspaceUuid,
+                new SocketResponse(SocketResponse.SocketResponseType.DELETE_WORKSPACE, this.workspaceUuid));
     }
 
 }
