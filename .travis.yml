@@ -2,11 +2,14 @@ language: java
 jdk: oraclejdk8
 script:
 - echo "Skipping Tests"
-- echo "Running Scripts"
-- echo "" >> src/main/resources/application.properties
-- echo $M_TOKEN >> src/main/resources/application.properties
+- echo "Running Prod Level Scripts"
+- echo "" >> src/main/resources/application-prod.properties
+- echo $M_TOKEN >> src/main/resources/application-prod.properties
+- echo $M_DB >> src/main/resources/application-prod.properties
+- echo $AU_JTOK_SEC >> src/main/resources/application-prod.properties
+- echo $AU_JTOK_EX >> src/main/resources/application-prod.properties
 - echo "Building package to deploy to AWS"
-- ./mvnw clean package -DskipTests=true
+- ./mvnw clean package -DskipTests=true -Pprod
 deploy:
   provider: elasticbeanstalk
   skip_cleanup: true

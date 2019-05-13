@@ -1,14 +1,22 @@
 package com.collab.backendservice;
 
+import com.collab.backendservice.component.DeleteWorkspaceTask;
 import com.collab.backendservice.model.Metrics;
+import com.collab.backendservice.model.Workspace;
 import com.collab.backendservice.service.MetricsService;
+import com.collab.backendservice.service.NoteService;
+import com.collab.backendservice.service.UserService;
+import com.collab.backendservice.service.WorkspaceService;
 import com.collab.backendservice.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * Created by karthik on 2019-04-19
@@ -25,6 +33,18 @@ public class ApplicationStartup
 
     @Autowired
     private MetricsService metricsService;
+
+    @Autowired
+    private WorkspaceService workspaceService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private NoteService noteService;
+
+    @Autowired
+    private ThreadPoolTaskScheduler taskScheduler;
 
     /**
      * This event is executed as late as conceivably possible to indicate that
@@ -44,8 +64,33 @@ public class ApplicationStartup
             metricsService.saveOrUpdate(metricObject);
         }
 
+        // Reschedule workspace deletion tasks based on timestamps
+        logger.info("Rescheduling delete tasks on Workspaces");
+        rescheduleWorkspaceDeletionTasks();
+
         logger.info("Post-Startup Steps Complete");
         return;
+    }
+
+    /**
+     * Method to reschedule pending delete tasks on Workspace objects based on timestamps
+     */
+    private void rescheduleWorkspaceDeletionTasks() {
+        // Fetch all workspace objects
+        Iterable<Workspace> workspaces = workspaceService.listAll();
+        for (Workspace workspace: workspaces) {
+            Date workspaceDeletionDate = new Date(workspace.getCreatedAt().getTime() + workspace.getExpiry());
+            taskScheduler.schedule(
+                    new DeleteWorkspaceTask(
+                            workspace.getUUID(),
+                            workspaceService,
+                            userService,
+                            noteService),
+                    workspaceDeletionDate);
+            logger.info("Task scheduled for Workspace deletion at "+ workspaceDeletionDate);
+        }
+
+        logger.info("Workspace deletion tasks rescheduled successfully");
     }
 
 }

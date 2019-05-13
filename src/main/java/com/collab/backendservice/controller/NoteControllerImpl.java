@@ -1,15 +1,16 @@
 package com.collab.backendservice.controller;
 
-import com.collab.backendservice.model.Note;
-import com.collab.backendservice.model.NoteOperationObject;
-import com.collab.backendservice.model.User;
+import com.collab.backendservice.exception.CollabException;
+import com.collab.backendservice.model.*;
 import com.collab.backendservice.service.NoteService;
 import com.collab.backendservice.service.WorkspaceService;
 import com.collab.backendservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.stereotype.Component;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,9 +39,12 @@ public class NoteControllerImpl implements NoteController {
      * @return Note
      */
     @Override
-    public Note patchNote(NoteOperationObject payload) {
-        Note note = null;
-        if(payload != null) {
+    public SocketResponse patchNote(Principal principal, NoteOperationObject payload) {
+        Note note;
+        SocketResponse socketResponse = null;
+        NoteResponseObject noteResponseObject;
+        String principalUserUUID = ((User)((AnonymousAuthenticationToken) principal).getPrincipal()).getUUID();
+        if(payload != null && userService.isUserPartOfWorkspace(principalUserUUID , payload.getWorkspaceUUID())) {
             switch (payload.getNoteOperation()) {
                 case ADD:
                     note = new Note();
@@ -48,8 +52,11 @@ public class NoteControllerImpl implements NoteController {
                         note.setName(payload.getNoteName());
                     if(payload.getNoteValue() != null)
                         note.setValue(payload.getNoteValue());
+                    note.setUserUUID(payload.getUserUUID());
                     noteService.saveOrUpdate(note);
                     userService.addNoteToUserByUuid(payload.getUserUUID(), note.getUUID());
+                    noteResponseObject = new NoteResponseObject(note);
+                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.SAVE_NOTE, noteResponseObject);
                     break;
                 case EDIT:
                     note = noteService.findByUuid(payload.getNoteUUID());
@@ -60,6 +67,8 @@ public class NoteControllerImpl implements NoteController {
                             note.setValue(payload.getNoteValue());
                         noteService.saveOrUpdate(note);
                     }
+                    noteResponseObject = new NoteResponseObject(note);
+                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.SAVE_NOTE, noteResponseObject);
                     //TODO: Throw custom exception for note not being found
                     break;
                 case DELETE:
@@ -68,6 +77,8 @@ public class NoteControllerImpl implements NoteController {
                         userService.removeNoteFromUserByUuid(payload.getUserUUID(), payload.getNoteUUID());
                         noteService.deleteById(note.getId());
                     }
+                    noteResponseObject = new NoteResponseObject(note);
+                    socketResponse = new SocketResponse(SocketResponse.SocketResponseType.DELETE_NOTE, noteResponseObject);
                     //TODO: Throw custom exception for note not being found
                     break;
                 default:
@@ -75,7 +86,7 @@ public class NoteControllerImpl implements NoteController {
             }
         }
         //TODO: Throw custom exception as payload is empty
-        return note;
+        return socketResponse;
     }
 
     /**
@@ -84,15 +95,18 @@ public class NoteControllerImpl implements NoteController {
      * @return List<Note>
      */
     @Override
-    public List<Note> getNotes(String userUUID) {
+    public List<Note> getNotes(Principal principal,String userUUID) {
         List<Note> notes = new ArrayList<>();
-        User user = userService.findByUuid(userUUID);
-        if (user != null) {
-            notes = user.getNotesReferences()
-                    .stream()
-                    .map(noteRef -> (noteService.findById(noteRef)))
-                    .collect(Collectors.toList());
+        if(((User)((AnonymousAuthenticationToken) principal).getPrincipal()).getUUID().equalsIgnoreCase(userUUID)) {
+            User user = userService.findByUuid(userUUID);
+            if (user != null) {
+                notes = user.getNotesReferences()
+                        .stream()
+                        .map(noteRef -> (noteService.findById(noteRef)))
+                        .collect(Collectors.toList());
+            }
         }
+        //TODO: Throw custom exception when principal and userUUID does not match
         return notes;
     }
 }

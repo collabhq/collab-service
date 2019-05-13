@@ -28,6 +28,8 @@ public class Workspace {
 
     private Date createdAt;
 
+    private int expiry;//Used for indicating expiry in milliseconds post createdAt Date value
+
     private String name;
 
     private List<String> userReferences;//Use manual references to users stored in their collection
@@ -85,6 +87,30 @@ public class Workspace {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Get created at Date value
+     * @return createdAt Date value
+     */
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * Get expiry in milliseconds as String
+     * @return expiry
+     */
+    public int getExpiry() {
+        return expiry;
+    }
+
+    /**
+     * Set expiry in milliseconds as String
+     * @param expiry
+     */
+    public void setExpiry(int expiry) {
+        this.expiry = expiry;
     }
 
     /**
