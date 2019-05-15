@@ -27,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         corsConfiguration.applyPermitDefaultValues();
 
         http.cors().configurationSource(request -> corsConfiguration);
-        http.authorizeRequests()
+        http.csrf().disable().authorizeRequests()
                 .antMatchers("/workspace", "/workspace/{identifier}", "/collabsocket/**").permitAll()
                 .anyRequest().hasAnyRole("USER")
                 .and()
