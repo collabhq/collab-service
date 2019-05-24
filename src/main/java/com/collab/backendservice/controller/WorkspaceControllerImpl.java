@@ -55,10 +55,10 @@ public class WorkspaceControllerImpl implements WorkspaceController {
         Object workspaceName = reqBody.get("workspaceName");
         User user = new User();
         Workspace workspace = new Workspace();
-        if(username != null && workspaceName != null) {
+        if(username != null)
             user.setName(username.toString());
+        if(workspaceName != null)
             workspace.setName(workspaceName.toString());
-        }
         user.setWorkspaceUUID(workspace.getUUID());
         userService.saveOrUpdate(user);
         // Set expiry to workspace object

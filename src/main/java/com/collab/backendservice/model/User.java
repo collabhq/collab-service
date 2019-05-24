@@ -41,7 +41,7 @@ public class User {
     public User() {
         this.createdAt = new Date();
         this.uuid = CustomUUIDGenerator.generateRandomUUID();
-        this.name = "";
+        this.name = "User";
         this.notesReferences = new ArrayList<String>();
     }
 
