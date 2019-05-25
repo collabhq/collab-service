@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
@@ -45,6 +46,9 @@ public class ApplicationStartup
 
     @Autowired
     private ThreadPoolTaskScheduler taskScheduler;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     /**
      * This event is executed as late as conceivably possible to indicate that
@@ -85,7 +89,8 @@ public class ApplicationStartup
                             workspace.getUUID(),
                             workspaceService,
                             userService,
-                            noteService),
+                            noteService,
+                            simpMessagingTemplate),
                     workspaceDeletionDate);
             logger.info("Task scheduled for Workspace deletion at "+ workspaceDeletionDate);
         }

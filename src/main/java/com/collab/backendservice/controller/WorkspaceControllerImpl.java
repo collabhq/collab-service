@@ -76,7 +76,8 @@ public class WorkspaceControllerImpl implements WorkspaceController {
                         workspace.getUUID(),
                         workspaceService,
                         userService,
-                        noteService),
+                        noteService,
+                        simpMessagingTemplate),
                 workspaceDeletionDate);
         logger.info("Task scheduled for Workspace deletion at "+ workspaceDeletionDate);
         HashMap<String, Object> output = new HashMap<>();
