@@ -100,7 +100,9 @@ public class WorkspaceControllerImpl implements WorkspaceController {
         Object username = reqBody.get("username");
         HashMap<String, Object> output = new HashMap<>();
         Workspace workspace = workspaceService.findByUuid(identifier);
-        User user = new User(username.toString());
+        User user = new User();
+        if(username != null)
+            user.setName(username.toString());
         if(workspace != null) {
             user.setWorkspaceUUID(workspace.getUUID());
             userService.saveOrUpdate(user);
