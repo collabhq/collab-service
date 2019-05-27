@@ -55,10 +55,10 @@ public class WorkspaceControllerImpl implements WorkspaceController {
         Object workspaceName = reqBody.get("workspaceName");
         User user = new User();
         Workspace workspace = new Workspace();
-        if(username != null && workspaceName != null) {
+        if(username != null)
             user.setName(username.toString());
+        if(workspaceName != null)
             workspace.setName(workspaceName.toString());
-        }
         user.setWorkspaceUUID(workspace.getUUID());
         userService.saveOrUpdate(user);
         // Set expiry to workspace object
@@ -76,7 +76,8 @@ public class WorkspaceControllerImpl implements WorkspaceController {
                         workspace.getUUID(),
                         workspaceService,
                         userService,
-                        noteService),
+                        noteService,
+                        simpMessagingTemplate),
                 workspaceDeletionDate);
         logger.info("Task scheduled for Workspace deletion at "+ workspaceDeletionDate);
         HashMap<String, Object> output = new HashMap<>();
@@ -99,7 +100,9 @@ public class WorkspaceControllerImpl implements WorkspaceController {
         Object username = reqBody.get("username");
         HashMap<String, Object> output = new HashMap<>();
         Workspace workspace = workspaceService.findByUuid(identifier);
-        User user = new User(username.toString());
+        User user = new User();
+        if(username != null)
+            user.setName(username.toString());
         if(workspace != null) {
             user.setWorkspaceUUID(workspace.getUUID());
             userService.saveOrUpdate(user);

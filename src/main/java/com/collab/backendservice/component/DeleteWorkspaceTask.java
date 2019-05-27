@@ -31,8 +31,6 @@ public class DeleteWorkspaceTask implements Runnable {
     private WorkspaceService workspaceService;
     private UserService userService;
     private NoteService noteService;
-
-    @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
     /**
@@ -45,11 +43,12 @@ public class DeleteWorkspaceTask implements Runnable {
      * Constructor to init with workspace uuid
      * @param workspaceUuid
      */
-    public DeleteWorkspaceTask(String workspaceUuid, WorkspaceService workspaceService, UserService userService, NoteService noteService) {
+    public DeleteWorkspaceTask(String workspaceUuid, WorkspaceService workspaceService, UserService userService, NoteService noteService, SimpMessagingTemplate simpMessagingTemplate) {
         this.workspaceUuid = workspaceUuid;
         this.workspaceService = workspaceService;
         this.userService = userService;
         this.noteService = noteService;
+        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     @Override
@@ -78,7 +77,7 @@ public class DeleteWorkspaceTask implements Runnable {
         logger.info("Workspace with "+workspaceUuid+" deleted at "+new Date());
 
         //Notify when a workspace is deleted to connected clients
-        simpMessagingTemplate.convertAndSend("/topic/workspace/"+this.workspaceUuid,
+        this.simpMessagingTemplate.convertAndSend("/topic/workspace/"+this.workspaceUuid,
                 new SocketResponse(SocketResponse.SocketResponseType.DELETE_WORKSPACE, this.workspaceUuid));
     }
 
