@@ -41,7 +41,7 @@ public class Workspace {
     public Workspace() {
         this.createdAt = new Date();
         this.uuid = CustomUUIDGenerator.generateShortUUID();
-        this.name = "";
+        this.name = "My Workspace";
         this.userReferences = new ArrayList<String>();
     }
 
