@@ -13,10 +13,14 @@ import com.collab.backendservice.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -121,5 +125,18 @@ public class WorkspaceControllerImpl implements WorkspaceController {
         simpMessagingTemplate.convertAndSend("/topic/workspace/"+identifier,
                 new SocketResponse(SocketResponse.SocketResponseType.USER, user));
         return output;
+    }
+
+    /**
+     * Checks if a given workspace exists by its UUID
+     * @param workspaceUUID Workspace UUID
+     * @return SocketResponse
+     */
+    @Override
+    public SocketResponse checkIfWorkspaceExists(@Payload String workspaceUUID) {
+        if (workspaceUUID != null && workspaceService.findByUuid(workspaceUUID) != null)
+            return null;
+        else
+            return new SocketResponse(SocketResponse.SocketResponseType.DELETE_WORKSPACE, workspaceUUID);
     }
 }
