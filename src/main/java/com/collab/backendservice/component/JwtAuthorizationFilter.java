@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -39,7 +40,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Value("${auth.jwt.secret}")
     private String JWT_SECRET;
-    
+
+    @Autowired
     private UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
@@ -73,9 +75,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         .map(authority -> new SimpleGrantedAuthority((String) authority))
                         .collect(Collectors.toList());
 
-                if(userService == null) {
+                if (userService == null) {
                     WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-                    userService = webApplicationContext.getBean(UserService.class);
+                    userService = Objects.requireNonNull(webApplicationContext).getBean(UserService.class);
                 }
 
                 User user = userService.findByUuid(userUUID);
