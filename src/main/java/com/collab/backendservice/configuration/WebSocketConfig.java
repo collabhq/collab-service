@@ -70,7 +70,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     AnonymousAuthenticationToken anonymousAuthenticationToken = jwtAuthorizationFilter.getAuthentication(token);
                     accessor.setUser(anonymousAuthenticationToken);
                 }
-                logger.info("Socket Connection Authorised");
+                logger.debug("Socket Connection Authorised");
                 return message;
             }
         });
