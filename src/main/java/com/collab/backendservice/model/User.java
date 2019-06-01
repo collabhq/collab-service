@@ -116,8 +116,8 @@ public class User {
     @Override
     public String toString() {
         return String.format(
-                "User[id=%s, uuid=%s, name='%s']",
-                id, uuid, name);
+                "User[id=%s, uuid=%s]",
+                id, uuid);
     }
 
 }

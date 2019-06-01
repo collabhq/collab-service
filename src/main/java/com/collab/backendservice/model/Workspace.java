@@ -124,8 +124,8 @@ public class Workspace {
     @Override
     public String toString() {
         return String.format(
-                "Workspace[id=%s, uuid=%s, name='%s']",
-                id, uuid, name);
+                "Workspace[id=%s, uuid=%s]",
+                id, uuid);
     }
 
 }
