@@ -121,8 +121,8 @@ public class Note {
     @Override
     public String toString() {
         return String.format(
-                "Note[id=%s, uuid=%s, name='%s', value='%s']",
-                id, uuid, name, value);
+                "Note[id=%s, uuid=%s]",
+                id, uuid);
     }
 
 }
