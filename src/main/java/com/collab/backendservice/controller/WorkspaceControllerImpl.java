@@ -85,6 +85,8 @@ public class WorkspaceControllerImpl implements WorkspaceController {
         output.put("userUUID", user.getUUID());
         output.put("users", userService.listAllUsersByWorkspaceUuid(workspace.getUUID()));
         output.put("jwt", jwtTokenBuilder.buildJwtToken(user.getUUID()));
+        output.put("createdAt", workspace.getCreatedAt().getTime());
+        output.put("expiry", workspace.getExpiry());
         return output;
     }
 
@@ -115,6 +117,8 @@ public class WorkspaceControllerImpl implements WorkspaceController {
             output.put("notes", noteService.listAllNotesByWorkspaceUuid(workspace.getUUID()));
             output.put("users", userService.listAllUsersByWorkspaceUuid(workspace.getUUID()));
             output.put("jwt", jwtTokenBuilder.buildJwtToken(user.getUUID()));
+            output.put("createdAt", workspace.getCreatedAt().getTime());
+            output.put("expiry", workspace.getExpiry());
         }
         //TODO: Throw custom exception when workspace is not found
         //Notify when a user joins a workspace
