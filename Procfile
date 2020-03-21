@@ -1,1 +1,1 @@
-web: java -jar target/*.war
+web: java -jar -Dspring.profiles.active=prod target/*.war
