@@ -2,15 +2,8 @@ dist: trusty
 language: java
 jdk: oraclejdk8
 script:
-- echo "Skipping Tests"
-- echo "Building package to deploy"
+- echo "Running tests and building package"
 - ./mvnw clean package -DskipTests=true -Pprod
-deploy:
-  provider: heroku
-  api_key: $H_API_KEY
-  app: collab-service
-  on:
-    branch: release
 notifications:
   slack:
     secure: oLPYpfIQAJ6VteHqRbpnkIOcdR1zyY9dLDVXCYiGZ6oaMq68vW86PdHnL/goFUpNTE2hE1Y1U5eVM7c6o0VrqJb/rBxTb4gCElTwfxfTKL9l5RuHspN9kSOENjg6gR1apuMarWpZTHxrF/OUvqVOqz2m4l8rzY77wXDC0ibvnJS2gCwA4GBTRJltV2P8w9ci3WeSckaq3BBdb0ochQcyut/yZ6yxxnd4/ARHzaBTdFmlOXRhzBF1KRYni5lcrqjXiMYLi822g496UQoYXrXQY1xXolSrDnDZHfiuBrkG2k0LuvtC2XFuaRBtUBQI+km4JpKA+y+aSkX4Z+vug5WRMsdPJ4wjS9Q7w5w/rzsZWZ4k/ZTvIZJis3CiDzWOOl/an3nLpXjbyQhCrf5c25WnjOfynTp3wlZV5c1guxJy4ptm2FoE3hn1ZUHPrKruQ/X3tQorFxiLTT1L8SCycP+0Se2AcieAcDYYt71xjmVk0CnyXKuZk7nZvuYTZyxXPkF1+xdC+pFjoAiPHYQEyw+CpWql1uCn8JHWZxTuu2NDiDYxoi/oMYY/SvdwZpJ5EXVa1VStxc2QvLDhQGE3WKGTA/oAq4noydV0oONNU9NJRL/odq5+bQIXaz/jAvR32m8hIRvQE5UFmdsvq0x2t8M+IqrueUg7zyjVmiXmjAgwdoI=
