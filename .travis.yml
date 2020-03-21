@@ -9,18 +9,13 @@ script:
 - echo $M_DB >> src/main/resources/application-prod.properties
 - echo $AU_JTOK_SEC >> src/main/resources/application-prod.properties
 - echo $AU_JTOK_EX >> src/main/resources/application-prod.properties
-- echo "Building package to deploy to AWS"
+- echo "Building package to deploy"
 - ./mvnw clean package -DskipTests=true -Pprod
 deploy:
-  provider: elasticbeanstalk
-  skip_cleanup: true
-  app: $AWS_APP_NAME
-  env: $AWS_ENV_NAME
-  zip_file: 'target/collab-service-0.0.1-SNAPSHOT.war'
-  bucket_name: $AWS_BUCKET_NAME
-  region: eu-central-1
-  access_key_id: $AWS_ACCESS_KEY_ID
-  secret_access_key: $AWS_ACCESS_KEY
+  provider: heroku
+  api_key:
+    secure: $H_API_KEY
+  app: collab-service
   on:
     branch: release
 notifications:

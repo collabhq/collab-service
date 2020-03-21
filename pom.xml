@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.collab</groupId>
 	<artifactId>collab-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.4</version>
 	<name>collab-service</name>
 	<description>Backend service for Collab</description>
 	<packaging>war</packaging>
