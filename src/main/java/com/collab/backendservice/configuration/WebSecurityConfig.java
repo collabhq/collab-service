@@ -17,13 +17,19 @@ import java.util.ArrayList;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        // Force HTTPS
+        http.requiresChannel()
+                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+                .requiresSecure();
+
+        // CORS
         ArrayList<String> allowedOriginsList = new ArrayList<>();
         allowedOriginsList.add("http://localhost:3000");
         allowedOriginsList.add("https://collabhq.app");
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(allowedOriginsList);
         corsConfiguration.setAllowCredentials(true);
-
         corsConfiguration.applyPermitDefaultValues();
 
         http.cors().configurationSource(request -> corsConfiguration);
