@@ -1,18 +1,15 @@
 package com.collab.backendservice.configuration;
 
 import com.collab.backendservice.component.JwtAuthorizationFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.simp.config.AbstractMessageBrokerConfiguration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -20,17 +17,15 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-import java.security.Principal;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Created by sudeshgutta on 2019-03-12
  */
 @Configuration
 @EnableWebSocketMessageBroker
+@Slf4j
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketConfig.class);
 
     @Autowired
     private JwtAuthorizationFilter jwtAuthorizationFilter;
@@ -70,7 +65,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     AnonymousAuthenticationToken anonymousAuthenticationToken = jwtAuthorizationFilter.getAuthentication(token);
                     accessor.setUser(anonymousAuthenticationToken);
                 }
-                logger.debug("Socket Connection Authorised");
+                log.debug("Socket Connection Authorised");
                 return message;
             }
         });

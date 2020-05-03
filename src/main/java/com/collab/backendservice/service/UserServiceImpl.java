@@ -1,15 +1,14 @@
 package com.collab.backendservice.service;
 
 import com.collab.backendservice.model.Note;
-import com.collab.backendservice.model.Workspace;
 import com.collab.backendservice.model.User;
+import com.collab.backendservice.model.Workspace;
 import com.collab.backendservice.repository.NoteRepository;
+import com.collab.backendservice.repository.UserRepository;
 import com.collab.backendservice.repository.WorkspaceRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.collab.backendservice.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +17,8 @@ import java.util.List;
  * Created by karthik on 2019-03-11
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -53,20 +52,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User saveOrUpdate(User user) {
         userRepository.save(user);
-        logger.info("Updated User: " + user);
+        log.info("Updated User: " + user);
         return user;
     }
 
     @Override
     public void delete(User user) {
         userRepository.delete(user);
-        logger.info("Deleted User: " + user);
+        log.info("Deleted User: " + user);
     }
 
     @Override
     public void deleteById(String id) {
         userRepository.deleteById(id);
-        logger.info("Deleted User with Id: " + id);
+        log.info("Deleted User with Id: " + id);
     }
 
     @Override
@@ -80,14 +79,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteAll() {
         userRepository.deleteAll();
-        logger.info("Deleted All Users");
+        log.info("Deleted All Users");
     }
 
     @Override
     public void addNoteToUser(User user, Note note) {
         user.getNotesReferences().add(note.getId());
         userRepository.save(user);
-        logger.info("Added Note: " + note + " to User: " + user);
+        log.info("Added Note: " + note + " to User: " + user);
     }
 
     @Override
@@ -95,7 +94,7 @@ public class UserServiceImpl implements UserService {
         User user = this.findById(userId);
         user.getNotesReferences().add(noteId);
         userRepository.save(user);
-        logger.info("Added Note with Id: " + noteId + " to User: " + user);
+        log.info("Added Note with Id: " + noteId + " to User: " + user);
     }
 
     @Override
@@ -104,14 +103,14 @@ public class UserServiceImpl implements UserService {
         Note note = noteRepository.findByUuid(noteUuid);
         user.getNotesReferences().add(note.getId());
         userRepository.save(user);
-        logger.info("Added Note with UUID: " + noteUuid + " to User: " + user);
+        log.info("Added Note with UUID: " + noteUuid + " to User: " + user);
     }
 
     @Override
     public void removeNoteFromUser(User user, Note note) {
         user.getNotesReferences().removeIf((String reference) -> note.getId().equals(reference));
         userRepository.save(user);
-        logger.info("Removed Note: " + note + " from User: " + user);
+        log.info("Removed Note: " + note + " from User: " + user);
     }
 
     @Override
@@ -119,7 +118,7 @@ public class UserServiceImpl implements UserService {
         User user = this.findById(userId);
         user.getNotesReferences().removeIf((String reference) -> noteId.equals(reference));
         userRepository.save(user);
-        logger.info("Removed Note with Id: " + noteId + " from User: " + user);
+        log.info("Removed Note with Id: " + noteId + " from User: " + user);
     }
 
     @Override
@@ -128,7 +127,7 @@ public class UserServiceImpl implements UserService {
         Note note = noteRepository.findByUuid(noteUuid);
         user.getNotesReferences().removeIf((String reference) -> note.getId().equals(reference));
         userRepository.save(user);
-        logger.info("Removed Note with UUID: " + noteUuid + " from User: " + user);
+        log.info("Removed Note with UUID: " + noteUuid + " from User: " + user);
     }
 
     @Override
@@ -138,7 +137,7 @@ public class UserServiceImpl implements UserService {
         for (String userReference : workspace.getUserReferences()) {
             userList.add(this.findById(userReference));
         }
-        logger.info("All users by workspace uuid: " + userList);
+        log.info("All users by workspace uuid: " + userList);
         return userList;
     }
 

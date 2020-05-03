@@ -5,9 +5,7 @@ import com.collab.backendservice.service.UserService;
 import com.collab.backendservice.util.Constants;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -33,6 +31,7 @@ import java.util.stream.Collectors;
  * Created by sudeshgutta on 2019-04-27
  */
 @Component
+@Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -43,8 +42,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserService userService;
-
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -85,15 +82,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     anonymousAuthenticationToken = new AnonymousAuthenticationToken(userUUID, user, authorities);
                 }
             } catch (ExpiredJwtException exception) {
-                logger.warn("Request to parse expired JWT : {} failed : {}", token, exception.getMessage());
+                log.warn("Request to parse expired JWT : {} failed : {}", token, exception.getMessage());
             } catch (UnsupportedJwtException exception) {
-                logger.warn("Request to parse unsupported JWT : {} failed : {}", token, exception.getMessage());
+                log.warn("Request to parse unsupported JWT : {} failed : {}", token, exception.getMessage());
             } catch (MalformedJwtException exception) {
-                logger.warn("Request to parse invalid JWT : {} failed : {}", token, exception.getMessage());
+                log.warn("Request to parse invalid JWT : {} failed : {}", token, exception.getMessage());
             } catch (SignatureException exception) {
-                logger.warn("Request to parse JWT with invalid signature : {} failed : {}", token, exception.getMessage());
+                log.warn("Request to parse JWT with invalid signature : {} failed : {}", token, exception.getMessage());
             } catch (IllegalArgumentException exception) {
-                logger.warn("Request to parse empty or null JWT : {} failed : {}", token, exception.getMessage());
+                log.warn("Request to parse empty or null JWT : {} failed : {}", token, exception.getMessage());
             }
         }
         return anonymousAuthenticationToken;

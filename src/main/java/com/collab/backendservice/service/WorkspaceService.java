@@ -1,7 +1,7 @@
 package com.collab.backendservice.service;
 
-import com.collab.backendservice.model.Workspace;
 import com.collab.backendservice.model.User;
+import com.collab.backendservice.model.Workspace;
 
 /**
  * Created by karthik on 2019-03-11

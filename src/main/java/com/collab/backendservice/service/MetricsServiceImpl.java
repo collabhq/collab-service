@@ -3,8 +3,7 @@ package com.collab.backendservice.service;
 import com.collab.backendservice.model.Metrics;
 import com.collab.backendservice.repository.MetricsRepository;
 import com.collab.backendservice.util.Constants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +11,8 @@ import org.springframework.stereotype.Service;
  * Created by karthik on 2019-04-19
  */
 @Service
+@Slf4j
 public class MetricsServiceImpl implements MetricsService {
-    private static final Logger logger = LoggerFactory.getLogger(MetricsServiceImpl.class);
 
     @Autowired
     private MetricsRepository metricsRepository;
@@ -36,7 +35,7 @@ public class MetricsServiceImpl implements MetricsService {
     @Override
     public Metrics saveOrUpdate(Metrics document) {
         metricsRepository.save(document);
-        logger.info("Updated Metrics Document: " + document);
+        log.info("Updated Metrics Document: " + document);
         return document;
     }
 

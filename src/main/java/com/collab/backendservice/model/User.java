@@ -1,7 +1,8 @@
 package com.collab.backendservice.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.collab.backendservice.util.CustomUUIDGenerator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,105 +20,24 @@ import java.util.List;
  */
 @JsonIgnoreProperties({"id", "notesReferences"})
 @Document(collection = "users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class User {
 
     @Id
     private String id;
 
     @Indexed(unique = true)
-    private String uuid;//Use separate UUID for reference
+    private String uuid = CustomUUIDGenerator.generateRandomUUID();//Use separate UUID for reference
 
-    private Date createdAt;
+    @Setter(AccessLevel.NONE)
+    private Date createdAt = new Date();
     private String workspaceUUID;//Workspace user belongs to
 
-    private String name;
+    private String name = "User";
 
-    private List<String> notesReferences;//Use manual references to notes stored in their collection
-
-    /**
-     * No-arg Constructor
-     * UUID enforced
-     */
-    public User() {
-        this.createdAt = new Date();
-        this.uuid = CustomUUIDGenerator.generateRandomUUID();
-        this.name = "User";
-        this.notesReferences = new ArrayList<String>();
-    }
-
-    /**
-     * Constructor
-     * UUID enforced
-     * @param name Name of user
-     */
-    public User(String name) {
-        this.createdAt = new Date();
-        this.uuid = CustomUUIDGenerator.generateRandomUUID();
-        this.name = name;
-        this.notesReferences = new ArrayList<String>();
-    }
-
-    /**
-     * Get Object ID
-     * @return ID
-     */
-    public String getId() {
-        return this.id;
-    }
-
-    /**
-     * Get Manually generated custom UUID
-     * @return UUID
-     */
-    public String getUUID() {
-        return this.uuid;
-    }
-
-    /**
-     * Get name of user
-     * @return name
-     */
-    public String getName() {
-        return this.name;
-    }
-
-    /**
-     * Set name for user
-     * @param name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Get workspace UUID of this user
-     * @return workspaceUUID
-     */
-    public String getWorkspaceUUID() {
-        return workspaceUUID;
-    }
-
-    /**
-     * Set workspace UUID for this user
-     * @param workspaceUUID
-     */
-    public void setWorkspaceUUID(String workspaceUUID) {
-        this.workspaceUUID = workspaceUUID;
-    }
-
-    /**
-     * Get a list of DB references of all notes linked to this user
-     * @return List of references
-     */
-    public List<String> getNotesReferences() {
-        return this.notesReferences;
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "User[id=%s, uuid=%s]",
-                id, uuid);
-    }
-
+    private List<String> notesReferences = new ArrayList<>();//Use manual references to notes stored in their collection
 }

@@ -1,7 +1,8 @@
 package com.collab.backendservice.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.collab.backendservice.util.Constants;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,6 +16,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @JsonIgnoreProperties({"id"})
 @Document(collection = "metrics")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class Metrics {
 
     @Id
@@ -23,60 +29,21 @@ public class Metrics {
     @Indexed(unique = true)
     private String uniqueIndex = Constants.METRICS_UNIQUE_INDEX;
 
-    private int numberOfUsers;
-    private int numberOfWorkspaces;
-
-    /**
-     * No-arg Constructor
-     */
-    public Metrics() {
-        this.numberOfUsers = 0;
-        this.numberOfWorkspaces = 0;
-    }
-
-    /**
-     * Get Object ID
-     * @return ID
-     */
-    public String getId() {
-        return this.id;
-    }
-
-    /**
-     * Get Number of Users Created
-     * @return numberOfUsers
-     */
-    public int getUsers() {
-        return this.numberOfUsers;
-    }
-
-    /**
-     * Get Number of Workspaces Created
-     * @return numberOfWorkspaces
-     */
-    public int getWorkspaces() {
-        return this.numberOfWorkspaces;
-    }
+    private int users;
+    private int workspaces;
 
     /**
      * Increment User metric
      */
     public void incrementUserValue() {
-        this.numberOfUsers++;
+        this.users++;
     }
 
     /**
      * Increment Workspace metric
      */
     public void incrementWorkspaceValue() {
-        this.numberOfWorkspaces++;
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "Metrics[id=%s, numberOfUsers=%d, numberOfWorkspaces=%d]",
-                id, numberOfUsers, numberOfWorkspaces);
+        this.workspaces++;
     }
 
 }

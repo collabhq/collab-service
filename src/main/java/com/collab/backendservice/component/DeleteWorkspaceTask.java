@@ -1,14 +1,14 @@
 package com.collab.backendservice.component;
 
 import com.collab.backendservice.model.Note;
-import com.collab.backendservice.model.SocketResponse;
 import com.collab.backendservice.model.User;
+import com.collab.backendservice.model.response.SocketResponseObject;
 import com.collab.backendservice.service.NoteService;
 import com.collab.backendservice.service.UserService;
 import com.collab.backendservice.service.WorkspaceService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -23,8 +23,10 @@ import java.util.List;
  * Class used to delete all Workspace, and subsequent User and Note objects based on scheduled time set by user.
  */
 @Component
+@Slf4j
+@AllArgsConstructor
+@NoArgsConstructor
 public class DeleteWorkspaceTask implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(DeleteWorkspaceTask.class);
 
     private String workspaceUuid;
 
@@ -32,24 +34,6 @@ public class DeleteWorkspaceTask implements Runnable {
     private UserService userService;
     private NoteService noteService;
     private SimpMessagingTemplate simpMessagingTemplate;
-
-    /**
-     * No-arg Constructor
-     */
-    public DeleteWorkspaceTask() {
-    }
-
-    /**
-     * Constructor to init with workspace uuid
-     * @param workspaceUuid
-     */
-    public DeleteWorkspaceTask(String workspaceUuid, WorkspaceService workspaceService, UserService userService, NoteService noteService, SimpMessagingTemplate simpMessagingTemplate) {
-        this.workspaceUuid = workspaceUuid;
-        this.workspaceService = workspaceService;
-        this.userService = userService;
-        this.noteService = noteService;
-        this.simpMessagingTemplate = simpMessagingTemplate;
-    }
 
     @Override
     public void run() {
@@ -64,21 +48,21 @@ public class DeleteWorkspaceTask implements Runnable {
         for (Note note: noteList) {
             noteService.deleteById(note.getId());
         }
-        logger.info("Note objects for Workspace with "+workspaceUuid+" deleted at "+new Date());
+        log.info("Note objects for Workspace with "+workspaceUuid+" deleted at "+new Date());
 
         // Handle User deletion
         for (User user: userList) {
             userService.deleteById(user.getId());
         }
-        logger.info("User objects for Workspace with "+workspaceUuid+" deleted at "+new Date());
+        log.info("User objects for Workspace with "+workspaceUuid+" deleted at "+new Date());
 
         // Handle Workspace deletion
         workspaceService.delete(workspaceService.findByUuid(this.workspaceUuid));
-        logger.info("Workspace with "+workspaceUuid+" deleted at "+new Date());
+        log.info("Workspace with "+workspaceUuid+" deleted at "+new Date());
 
         //Notify when a workspace is deleted to connected clients
         this.simpMessagingTemplate.convertAndSend("/topic/workspace/"+this.workspaceUuid,
-                new SocketResponse(SocketResponse.SocketResponseType.DELETE_WORKSPACE, this.workspaceUuid));
+                new SocketResponseObject(SocketResponseObject.SocketResponseType.DELETE_WORKSPACE, this.workspaceUuid));
     }
 
 }

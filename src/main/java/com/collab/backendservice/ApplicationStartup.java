@@ -8,8 +8,7 @@ import com.collab.backendservice.service.NoteService;
 import com.collab.backendservice.service.UserService;
 import com.collab.backendservice.service.WorkspaceService;
 import com.collab.backendservice.util.Constants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -27,10 +26,9 @@ import java.util.Date;
  * This Class is to used to run code once Spring context has been initialised.
  */
 @Component
+@Slf4j
 public class ApplicationStartup
         implements ApplicationListener<ApplicationReadyEvent> {
-
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationStartup.class);
 
     @Autowired
     private MetricsService metricsService;
@@ -56,23 +54,23 @@ public class ApplicationStartup
      */
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent event) {
-        logger.info("Running Post-Startup Steps");
+        log.info("Running Post-Startup Steps");
 
         // Check for and create Metrics document
-        logger.info("Checking for Metrics document");
+        log.info("Checking for Metrics document");
 
         Metrics metricObject;
         if((metricObject = metricsService.findByUniqueIndex(Constants.METRICS_UNIQUE_INDEX)) == null){
-            logger.info("Metrics document does not exist, creating document");
+            log.info("Metrics document does not exist, creating document");
             metricObject = new Metrics();
             metricsService.saveOrUpdate(metricObject);
         }
 
         // Reschedule workspace deletion tasks based on timestamps
-        logger.info("Rescheduling delete tasks on Workspaces");
+        log.info("Rescheduling delete tasks on Workspaces");
         rescheduleWorkspaceDeletionTasks();
 
-        logger.info("Post-Startup Steps Complete");
+        log.info("Post-Startup Steps Complete");
         return;
     }
 
@@ -86,16 +84,16 @@ public class ApplicationStartup
             Date workspaceDeletionDate = new Date(workspace.getCreatedAt().getTime() + workspace.getExpiry());
             taskScheduler.schedule(
                     new DeleteWorkspaceTask(
-                            workspace.getUUID(),
+                            workspace.getUuid(),
                             workspaceService,
                             userService,
                             noteService,
                             simpMessagingTemplate),
                     workspaceDeletionDate);
-            logger.info("Task scheduled for Workspace deletion at "+ workspaceDeletionDate);
+            log.info("Task scheduled for Workspace deletion at "+ workspaceDeletionDate);
         }
 
-        logger.info("Workspace deletion tasks rescheduled successfully");
+        log.info("Workspace deletion tasks rescheduled successfully");
     }
 
 }

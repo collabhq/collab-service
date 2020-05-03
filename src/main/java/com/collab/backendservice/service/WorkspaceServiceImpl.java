@@ -1,20 +1,19 @@
 package com.collab.backendservice.service;
 
-import com.collab.backendservice.model.Workspace;
 import com.collab.backendservice.model.User;
+import com.collab.backendservice.model.Workspace;
 import com.collab.backendservice.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.collab.backendservice.repository.WorkspaceRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.collab.backendservice.repository.WorkspaceRepository;
 
 /**
  * Created by karthik on 2019-03-11
  */
 @Service
+@Slf4j
 public class WorkspaceServiceImpl implements WorkspaceService {
-    private static final Logger logger = LoggerFactory.getLogger(WorkspaceServiceImpl.class);
 
     @Autowired
     private WorkspaceRepository workspaceRepository;
@@ -45,20 +44,20 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Override
     public Workspace saveOrUpdate(Workspace workspace) {
         workspaceRepository.save(workspace);
-        logger.info("Updated Workspace: " + workspace);
+        log.info("Updated Workspace: " + workspace);
         return workspace;
     }
 
     @Override
     public void delete(Workspace workspace) {
         workspaceRepository.delete(workspace);
-        logger.info("Deleted Workspace: " + workspace);
+        log.info("Deleted Workspace: " + workspace);
     }
 
     @Override
     public void deleteById(String id) {
         workspaceRepository.deleteById(id);
-        logger.info("Deleted Workspace with Id: " + id);
+        log.info("Deleted Workspace with Id: " + id);
     }
 
     @Override
@@ -72,14 +71,14 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Override
     public void deleteAll() {
         workspaceRepository.deleteAll();
-        logger.info("Deleted All Workspaces");
+        log.info("Deleted All Workspaces");
     }
 
     @Override
     public void addUserToWorkspace(Workspace workspace, User user) {
         workspace.getUserReferences().add(user.getId());
         workspaceRepository.save(workspace);
-        logger.info("Added User: " + user + " to workspace: " + workspace);
+        log.info("Added User: " + user + " to workspace: " + workspace);
     }
 
     @Override
@@ -87,7 +86,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         Workspace workspace = this.findById(workspaceId);
         workspace.getUserReferences().add(userId);
         workspaceRepository.save(workspace);
-        logger.info("Added User with Id: " + userId + " to workspace: " + workspace);
+        log.info("Added User with Id: " + userId + " to workspace: " + workspace);
     }
 
     @Override
@@ -96,14 +95,14 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         User user = userRepository.findByUuid(userUUID);
         workspace.getUserReferences().add(user.getId());
         workspaceRepository.save(workspace);
-        logger.info("Added User with Uuid: " + userUUID + " to workspace: " + workspace);
+        log.info("Added User with Uuid: " + userUUID + " to workspace: " + workspace);
     }
 
     @Override
     public void removeUserFromWorkspace(Workspace workspace, User user) {
         workspace.getUserReferences().removeIf((String reference) -> user.getId().equals(reference));
         workspaceRepository.save(workspace);
-        logger.info("Removed User: " + user + " from workspace: " + workspace);
+        log.info("Removed User: " + user + " from workspace: " + workspace);
     }
 
     @Override
@@ -111,7 +110,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         Workspace workspace = this.findById(workspaceId);
         workspace.getUserReferences().removeIf((String reference) -> userId.equals(reference));
         workspaceRepository.save(workspace);
-        logger.info("Removed User with Id: " + userId + " from workspace: " + workspace);
+        log.info("Removed User with Id: " + userId + " from workspace: " + workspace);
     }
 
     @Override
@@ -120,7 +119,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         User user = userRepository.findByUuid(userUUID);
         workspace.getUserReferences().removeIf((String reference) -> user.getId().equals(reference));
         workspaceRepository.save(workspace);
-        logger.info("Removed User with Uuid: " + userUUID + " from workspace: " + workspace);
+        log.info("Removed User with Uuid: " + userUUID + " from workspace: " + workspace);
     }
 
 }
